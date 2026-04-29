@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ระบบทะเบียนครุภัณฑ์ รพ.สต.บ้านคำใหญ่</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --primary:#0f6b58;--primary-light:#1a9478;--primary-dark:#094d40;
+  --accent:#f4a015;--danger:#e05c1e;--bg:#f0f4f3;
+  --card-r:12px;--shadow:0 2px 14px rgba(15,107,88,.10);
+  --sidebar-w:256px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sarabun',sans-serif;background:var(--bg);color:#1a2e2a;min-height:100vh}
+
+/* SIDEBAR */
+#sidebar{
+  width:var(--sidebar-w);position:fixed;top:0;left:0;height:100vh;
+  background:linear-gradient(160deg,#062e24 0%,var(--primary) 55%,var(--primary-light) 100%);
+  z-index:200;display:flex;flex-direction:column;
+  transition:transform .28s ease;box-shadow:3px 0 18px rgba(0,0,0,.22)
+}
+.brand{padding:22px 18px 16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.brand-ico{width:46px;height:46px;background:rgba(255,255,255,.15);border-radius:11px;
+  display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:9px}
+.brand h5{font-family:'Kanit',sans-serif;color:#fff;font-size:13.5px;font-weight:600;line-height:1.4;margin:0}
+.brand small{color:rgba(255,255,255,.5);font-size:11px}
+nav{padding:8px 0;flex:1;overflow-y:auto}
+.nav-sec{font-size:9.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;
+  color:rgba(255,255,255,.35);padding:14px 18px 3px}
+.nav-btn{
+  display:flex;align-items:center;gap:11px;padding:10px 18px;width:100%;
+  border:none;background:none;color:rgba(255,255,255,.7);text-align:left;cursor:pointer;
+  font-family:'Sarabun',sans-serif;font-size:13.5px;border-left:3px solid transparent;
+  transition:all .18s
+}
+.nav-btn:hover{background:rgba(255,255,255,.09);color:#fff}
+.nav-btn.active{background:rgba(255,255,255,.14);color:#fff;border-left-color:var(--accent);font-weight:600}
+.nav-btn .ni{font-size:17px;width:20px;text-align:center;flex-shrink:0}
+.nav-btn .nbadge{margin-left:auto;background:rgba(255,255,255,.2);color:#fff;
+  font-size:10px;padding:1px 7px;border-radius:10px;font-weight:700}
+.sidebar-foot{padding:14px 18px;border-top:1px solid rgba(255,255,255,.1);font-size:10.5px;color:rgba(255,255,255,.35);line-height:1.7}
+
+/* TOPBAR */
+#topbar{
+  position:fixed;top:0;left:var(--sidebar-w);right:0;height:58px;
+  background:#fff;border-bottom:1px solid #dde8e5;z-index:100;
+  display:flex;align-items:center;padding:0 22px;gap:10px;
+  box-shadow:0 2px 8px rgba(15,107,88,.06)
+}
+#menu-toggle{display:none;border:none;background:none;font-size:22px;cursor:pointer;color:var(--primary)}
+#topbar-title{font-family:'Kanit',sans-serif;font-size:16px;font-weight:600;color:var(--primary-dark);flex:1}
+.t-btn{border:none;background:none;cursor:pointer;width:34px;height:34px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:17px;color:#777;transition:all .18s}
+.t-btn:hover{background:var(--bg);color:var(--primary)}
+
+/* MAIN */
+#main{margin-left:var(--sidebar-w);padding-top:58px;min-height:100vh}
+.page{display:none;padding:26px 22px;animation:fadeUp .25s ease}
+.page.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.ph{margin-bottom:22px}
+.ph h2{font-family:'Kanit',sans-serif;font-size:21px;font-weight:600;color:var(--primary-dark)}
+.ph p{color:#6b8c85;font-size:13px;margin-top:3px}
+.ph-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* STAT CARDS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px}
+.sc{background:#fff;border-radius:var(--card-r);padding:18px 16px;box-shadow:var(--shadow);
+  border-left:4px solid var(--primary);position:relative;overflow:hidden}
+.sc.a{border-left-color:var(--accent)}.sc.r{border-left-color:var(--danger)}.sc.b{border-left-color:#2196f3}.sc.p{border-left-color:#8b5cf6}
+.sc-ico{width:42px;height:42px;border-radius:10px;background:rgba(15,107,88,.08);
+  display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--primary);margin-bottom:10px}
+.sc.a .sc-ico{background:rgba(244,160,21,.1);color:var(--accent)}
+.sc.r .sc-ico{background:rgba(224,92,30,.1);color:var(--danger)}
+.sc.b .sc-ico{background:rgba(33,150,243,.1);color:#2196f3}
+.sc.p .sc-ico{background:rgba(139,92,246,.1);color:#8b5cf6}
+.sc-val{font-family:'Kanit',sans-serif;font-size:24px;font-weight:700;color:var(--primary-dark)}
+.sc-lbl{font-size:11.5px;color:#6b8c85;margin-top:2px}
+
+/* CARD */
+.card2{background:#fff;border-radius:var(--card-r);box-shadow:var(--shadow)}
+.ch{padding:14px 18px;border-bottom:1px solid #e8f0ee;display:flex;align-items:center;
+  justify-content:space-between;background:#fafdfb;border-radius:var(--card-r) var(--card-r) 0 0}
+.ch h6{font-family:'Kanit',sans-serif;font-size:14.5px;font-weight:600;color:var(--primary-dark);margin:0}
+.cb{padding:18px}
+
+/* TABLE */
+.tw{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{background:#f0f7f5;color:var(--primary-dark);font-weight:600;padding:9px 11px;
+  text-align:left;border-bottom:2px solid #cde4de;white-space:nowrap;position:sticky;top:0;z-index:1}
+.tbl td{padding:8px 11px;border-bottom:1px solid #eef4f2;vertical-align:middle}
+.tbl tbody tr:hover{background:#f7fbf9}
+.tbl tbody tr:last-child td{border-bottom:none}
+
+/* BADGES */
+.bs{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.bs-ok{background:#e0f5ef;color:#0a6b4a}
+.bs-bad{background:#fde8e0;color:#b93a0a}
+.bs-wait{background:#fff3cd;color:#856404}
+.bs-done{background:#d1fae5;color:#065f46}
+.bs-prog{background:#dbeafe;color:#1d4ed8}
+.bt{background:#e8f0fe;color:#1a47a0;border-radius:6px;padding:2px 8px;font-size:11px}
+
+/* FILTER BAR */
+.fb{display:flex;flex-wrap:wrap;gap:9px;align-items:center;
+  padding:12px 18px;background:#fafdfb;border-bottom:1px solid #e8f0ee}
+.fb input,.fb select{font-family:'Sarabun',sans-serif;font-size:12.5px;
+  border:1.5px solid #cddbd7;border-radius:7px;padding:6px 10px;background:#fff;transition:border-color .2s}
+.fb input:focus,.fb select:focus{border-color:var(--primary);outline:none}
+.fb input{flex:1;min-width:160px}
+.fb-count{font-size:11.5px;color:#8aaca5;white-space:nowrap}
+
+/* BUTTONS */
+.btn-p{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;
+  border:none;border-radius:8px;padding:8px 16px;font-family:'Sarabun',sans-serif;font-size:13px;
+  font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+.btn-p:hover{filter:brightness(1.08);box-shadow:0 3px 12px rgba(15,107,88,.28);transform:translateY(-1px)}
+.btn-s{background:#fff;color:var(--primary);border:1.5px solid var(--primary);border-radius:8px;
+  padding:7px 16px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+.btn-s:hover{background:#f0f7f5}
+.bic{border:none;background:none;cursor:pointer;width:30px;height:30px;border-radius:7px;
+  display:inline-flex;align-items:center;justify-content:center;font-size:14px;transition:all .18s}
+.bic-e{color:#2196f3;background:rgba(33,150,243,.08)}.bic-e:hover{background:rgba(33,150,243,.18)}
+.bic-d{color:var(--danger);background:rgba(224,92,30,.08)}.bic-d:hover{background:rgba(224,92,30,.18)}
+
+/* FORMS */
+.fl{font-size:12.5px;font-weight:600;color:var(--primary-dark);margin-bottom:3px;display:block}
+.form-control,.form-select{font-family:'Sarabun',sans-serif;font-size:13px;
+  border:1.5px solid #cddbd7;border-radius:8px;padding:7px 11px;transition:border-color .2s,box-shadow .2s}
+.form-control:focus,.form-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(15,107,88,.1);outline:none}
+
+/* MODAL */
+.modal-content{border-radius:13px;border:none;box-shadow:0 8px 40px rgba(0,0,0,.18)}
+.modal-header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;
+  border-radius:13px 13px 0 0;padding:15px 22px}
+.modal-header .btn-close{filter:invert(1) opacity(.8)}
+.modal-title{font-family:'Kanit',sans-serif;font-size:15.5px;font-weight:600}
+.modal-footer{border-top:1px solid #e8f0ee;padding:12px 20px}
+
+/* TABS */
+.tabs{border-bottom:2px solid #dde8e5;margin-bottom:18px;display:flex;gap:0;overflow-x:auto}
+.tab{padding:9px 18px;cursor:pointer;font-size:13px;font-weight:600;color:#6b8c85;
+  border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .18s;white-space:nowrap}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab:hover{color:var(--primary)}
+.tabpane{display:none}.tabpane.show{display:block}
+
+/* REPORT ENHANCED */
+.rpt-sec-title{font-family:'Kanit',sans-serif;font-size:15px;font-weight:700;color:var(--primary-dark);
+  padding:10px 0 7px;margin:22px 0 10px;border-bottom:2px solid var(--primary);display:flex;align-items:center;gap:8px}
+.rpt-sec-title .rts-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.rpt-sum-boxes{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.rsb{flex:1;min-width:90px;border-radius:8px;padding:8px 14px;text-align:center}
+.rsb .rv{font-size:20px;font-weight:700}.rsb .rl{font-size:10.5px;margin-top:1px}
+.sup-rpt-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.sup-rpt-tbl th{background:var(--primary);color:#fff;padding:7px 7px;text-align:center;border:1px solid #777;font-size:11.5px}
+.sup-rpt-tbl th.left{text-align:left}
+.sup-rpt-tbl td{padding:6px 7px;border:1px solid #ccc;vertical-align:middle;font-size:12px}
+.sup-rpt-tbl tr:nth-child(even) td{background:#f5faf8}
+.sup-rpt-tbl .sum-row td{background:#d4ede5;font-weight:700;border-top:2px solid #aaa}
+.sup-rpt-tbl td.num{text-align:right}.sup-rpt-tbl td.ctr{text-align:center}
+.sig-row{margin-top:32px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.sig-box{text-align:center;border-top:1px solid #bbb;padding-top:7px}
+.sig-box .sg-role{font-size:12px;color:#555}
+.sig-box .sg-name{font-size:11px;color:#777;margin-top:18px;font-weight:600}
+.sig-box .sg-pos{font-size:10.5px;color:#aaa}
+.page-break{page-break-before:always}
+@media print{
+  .rpt-sec-title{color:#000 !important}
+  .tabs,.tab,.btn-p,.btn-s,#rpt-tabs{display:none !important}
+  .page-break{page-break-before:always}
+  .rtbl th,.sup-rpt-tbl th{background:#3a7060 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+/* SUPPLY DASHBOARD */
+.sup-dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.sup-dash-card{background:#fff;border-radius:var(--card-r);box-shadow:var(--shadow);overflow:hidden}
+.sdc-head{padding:12px 16px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #eef4f2}
+.sdc-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.sdc-head h6{font-family:'Kanit',sans-serif;font-size:13px;font-weight:600;color:var(--primary-dark);margin:0;line-height:1.3}
+.sdc-stats{display:flex;gap:0;border-bottom:1px solid #eef4f2}
+.sdc-stat{flex:1;padding:9px 10px;text-align:center;border-right:1px solid #eef4f2}
+.sdc-stat:last-child{border-right:none}
+.sv{font-family:'Kanit',sans-serif;font-size:17px;font-weight:700;color:var(--primary-dark)}
+.sl{font-size:10px;color:#8aaca5;margin-top:1px}
+.sdc-items{padding:0}
+.sdc-row{display:flex;align-items:center;padding:7px 14px;border-bottom:1px solid #f3f9f7;gap:8px;transition:background .15s}
+.sdc-row:last-child{border-bottom:none}
+.sdc-row:hover{background:#f7fbf9}
+.sr-name{flex:1;font-size:12px;color:#2a3e3a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sr-qty{font-size:12px;font-weight:700;color:var(--primary);min-width:32px;text-align:right}
+.sr-val{font-size:11px;color:#8aaca5;min-width:68px;text-align:right}
+.sdc-more{padding:7px 14px;font-size:11.5px;color:var(--primary);cursor:pointer;text-align:center;background:#fafdfb;border-top:1px solid #eef4f2}
+.sdc-more:hover{background:#e8f5f2}
+@media(max-width:900px){.sup-dash-grid{grid-template-columns:1fr}}
+
+/* CHARTS */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.cbox{background:#fff;border-radius:var(--card-r);padding:18px;box-shadow:var(--shadow)}
+.cbox h6{font-family:'Kanit',sans-serif;font-size:13.5px;color:var(--primary-dark);margin-bottom:12px}
+canvas{max-height:230px}
+
+/* LOADING */
+#overlay{position:fixed;inset:0;background:rgba(255,255,255,.82);
+  display:none;align-items:center;justify-content:center;flex-direction:column;z-index:9999;gap:10px}
+.spin{width:42px;height:42px;border:4px solid #cde4de;border-top-color:var(--primary);
+  border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* EMPTY */
+.empty{text-align:center;padding:44px 16px;color:#8aaca5}
+.empty i{font-size:44px;display:block;margin-bottom:10px;opacity:.35}
+.empty p{font-size:13px}
+
+/* REPORT */
+.rpt-hdr{text-align:center;border:1px solid #ccc;padding:14px;margin-bottom:14px;background:#fafdfb;border-radius:8px}
+.rpt-title{font-family:'Kanit',sans-serif;font-size:17px;font-weight:700;color:var(--primary-dark)}
+.rtbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+.rtbl th{background:var(--primary);color:#fff;padding:7px 6px;text-align:center;border:1px solid #888}
+.rtbl td{padding:6px;border:1px solid #ccc;vertical-align:middle}
+.rtbl tr:nth-child(even) td{background:#f5faf8}
+.rtbl .sum td{background:#d4ede5;font-weight:700}
+
+/* EXCEL IMPORT */
+.dropzone{border:2.5px dashed #b0d4cc;border-radius:11px;padding:34px 18px;text-align:center;
+  cursor:pointer;transition:all .22s;background:#f7fbfa;position:relative}
+.dropzone:hover,.dropzone.over{border-color:var(--primary);background:#e8f5f2;box-shadow:0 0 0 4px rgba(15,107,88,.07)}
+.dropzone .dz-ico{font-size:38px;color:#b0d4cc;margin-bottom:8px;transition:color .2s}
+.dropzone:hover .dz-ico,.dropzone.over .dz-ico{color:var(--primary)}
+.dropzone p{font-size:13.5px;color:#6b8c85;margin:0}.dropzone small{font-size:11px;color:#94b5ae}
+.dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.fi-bar{display:flex;align-items:center;gap:9px;background:#e0f5ef;border-radius:8px;padding:9px 13px;font-size:13px;color:#0a5c3f}
+.sht-btn{border:1.5px solid #cddbd7;border-radius:7px;padding:5px 12px;background:#fff;
+  font-size:12px;cursor:pointer;color:#3d6b60;transition:all .18s;font-family:'Sarabun',sans-serif}
+.sht-btn:hover,.sht-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.cmt{width:100%;border-collapse:collapse;font-size:12px}
+.cmt th{background:#f0f7f5;padding:7px 9px;text-align:left;color:var(--primary-dark);font-weight:600;border-bottom:2px solid #cde4de}
+.cmt td{padding:6px 9px;border-bottom:1px solid #eef4f2;vertical-align:middle}
+.cmt select{font-size:12px;border:1.5px solid #cddbd7;border-radius:6px;padding:4px 8px;
+  background:#fff;font-family:'Sarabun',sans-serif;min-width:155px;transition:border-color .2s}
+.cmt select:focus{border-color:var(--primary);outline:none}
+.cmt select.ok{border-color:#22c55e;background:#f0fdf4}
+.cmt select.skip{border-color:#fbbf24;background:#fffbeb}
+.pvw{overflow:auto;border-radius:8px;border:1px solid #dde8e5;max-height:220px}
+.pvw-tbl{width:100%;border-collapse:collapse;font-size:11px}
+.pvw-tbl th{background:#e8f5f2;padding:5px 7px;white-space:nowrap;text-align:left;
+  border-bottom:1px solid #c8e4de;position:sticky;top:0;color:var(--primary-dark)}
+.pvw-tbl td{padding:4px 7px;border-bottom:1px solid #f0f7f5;white-space:nowrap;max-width:150px;
+  overflow:hidden;text-overflow:ellipsis}
+.step-wrap{display:flex;align-items:flex-start;gap:0;margin-bottom:18px}
+.step-item{display:flex;flex-direction:column;align-items:center;min-width:60px}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;background:#dde8e5;color:#6b8c85;transition:all .25s;flex-shrink:0}
+.step-dot.cur{background:var(--primary);color:#fff}
+.step-dot.done{background:#22c55e;color:#fff}
+.step-lbl{font-size:9.5px;color:#8aaca5;margin-top:3px;text-align:center;white-space:nowrap}
+.step-line{flex:1;height:2px;background:#dde8e5;margin-top:14px;transition:background .25s}
+.step-line.done{background:#22c55e}
+.imp-step{display:none;animation:fadeUp .2s ease}.imp-step.show{display:block}
+.imp-prog{height:7px;background:#dde8e5;border-radius:4px;overflow:hidden;margin:8px 0}
+.imp-bar{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-light));border-radius:4px;width:0;transition:width .3s}
+.imp-log{background:#f7fbfa;border:1px solid #dde8e5;border-radius:7px;padding:10px;
+  max-height:150px;overflow-y:auto;font-size:12px;line-height:1.9}
+.log-ok{color:#0a6b4a}.log-err{color:#b93a0a}.log-info{color:#6b8c85}
+.rc-info{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.rc-box{background:#f0f7f5;border-radius:8px;padding:8px 14px;text-align:center;flex:1;min-width:90px}
+.rc-box .rv{font-size:20px;font-weight:700;color:var(--primary-dark)}
+.rc-box .rl{font-size:10.5px;color:#6b8c85}
+.rc-box.ok .rv{color:#0a6b4a}.rc-box.ok{background:#e0f5ef}
+.rc-box.warn .rv{color:#856404}.rc-box.warn{background:#fff8e1}
+.rc-box.bad .rv{color:#b93a0a}.rc-box.bad{background:#fde8e0}
+
+/* ASSET VALUE PAGE */
+.av-head{background:#fafdfb;border:1px solid #dde8e5;border-radius:10px;padding:16px 20px;margin-bottom:16px}
+.av-head .av-title{font-family:'Kanit',sans-serif;font-size:15px;font-weight:700;color:var(--primary-dark);margin-bottom:4px}
+.av-head .av-sub{font-size:12.5px;color:#6b8c85}
+.av-tbl{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border-radius:10px;overflow:hidden;box-shadow:var(--shadow)}
+.av-tbl thead th{background:var(--primary);color:#fff;padding:11px 10px;text-align:center;border:1px solid #0a5545;font-family:'Kanit',sans-serif;font-weight:600;font-size:13px;line-height:1.35}
+.av-tbl thead th.left{text-align:left}
+.av-tbl tbody td{padding:9px 11px;border:1px solid #d7e4df;vertical-align:middle}
+.av-tbl tbody tr:nth-child(even) td{background:#f5faf8}
+.av-tbl tbody tr:hover td{background:#e8f5f1}
+.av-tbl td.ctr{text-align:center}
+.av-tbl td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.av-tbl td.seq{text-align:center;color:#6b8c85;width:48px}
+.av-tbl td.code{text-align:center;font-family:'Kanit',sans-serif;color:var(--primary-dark);font-weight:600;width:120px}
+.av-tbl td.zero{color:#b8c9c5}
+.av-tbl .sum td{background:#d4ede5 !important;font-weight:700;color:var(--primary-dark);border-top:2px solid #0a5545;font-size:14px}
+.av-tbl td.name{font-weight:500}
+.av-tbl td .cnt-pill{display:inline-block;background:#e0f5ef;color:#0a6b4a;font-size:11px;font-weight:700;padding:1px 8px;border-radius:10px;margin-left:6px}
+.av-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.av-tools .av-date-lbl{font-size:12.5px;color:#6b8c85}
+.av-detail{background:#fff;border-radius:10px;box-shadow:var(--shadow);margin-top:14px;overflow:hidden;display:none}
+.av-detail.show{display:block}
+.av-detail-head{padding:11px 16px;background:#fafdfb;border-bottom:1px solid #e8f0ee;font-family:'Kanit',sans-serif;font-size:13.5px;font-weight:600;color:var(--primary-dark);display:flex;align-items:center;justify-content:space-between}
+.av-detail-head .av-close{border:none;background:none;color:#6b8c85;cursor:pointer;font-size:17px}
+.av-detail-tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.av-detail-tbl th{background:#f0f7f5;color:var(--primary-dark);font-weight:600;padding:8px 11px;text-align:left;border-bottom:2px solid #cde4de}
+.av-detail-tbl td{padding:7px 11px;border-bottom:1px solid #eef4f2}
+.av-detail-tbl tr:last-child td{border-bottom:none}
+.av-tbl .clickable{cursor:pointer}
+.av-tbl .clickable:hover{background:#dbefe8 !important}
+@media print{
+  .av-tbl thead th{background:#3a7060 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .av-tools,.av-detail{display:none !important}
+}
+@media(max-width:768px){
+  .av-tbl{font-size:11.5px}
+  .av-tbl thead th,.av-tbl tbody td{padding:7px 5px}
+  .av-tbl td.code{width:auto;font-size:11px}
+}
+
+/* OVERLAY for sidebar mobile */
+#sov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:150}
+
+@media(max-width:768px){
+  #sidebar{transform:translateX(-100%)}
+  #sidebar.open{transform:translateX(0)}
+  #sov.open{display:block}
+  #main{margin-left:0}
+  #topbar{left:0}
+  #menu-toggle{display:flex}
+  .chart-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .page{padding:14px}
+}
+@media print{
+  #sidebar,#topbar,#print-exclude,#overlay{display:none!important}
+  #main{margin-left:0!important;padding:0!important}
+  body{background:#fff!important}
+}
+</style>
+</head>
+<body>
+
+<div id="sov" onclick="sidebarClose()"></div>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="brand">
+    <div class="brand-ico">🏥</div>
+    <h5>รพ.สต.บ้านคำใหญ่</h5>
+    <small>ระบบทะเบียนครุภัณฑ์ ปี 2568</small>
+  </div>
+  <nav>
+    <div class="nav-sec">เมนูหลัก</div>
+    <button class="nav-btn active" data-page="dashboard" onclick="goPage('dashboard',this)">
+      <span class="ni"><i class="bi bi-speedometer2"></i></span><span>แดชบอร์ด</span>
+    </button>
+    <button class="nav-btn" data-page="equipment" onclick="goPage('equipment',this)">
+      <span class="ni"><i class="bi bi-archive"></i></span><span>ทะเบียนครุภัณฑ์</span>
+      <span class="nbadge" id="eq-badge">0</span>
+    </button>
+    <button class="nav-btn" data-page="maintenance" onclick="goPage('maintenance',this)">
+      <span class="ni"><i class="bi bi-tools"></i></span><span>ประวัติซ่อมบำรุง</span>
+    </button>
+    <div class="nav-sec">วัสดุ</div>
+    <button class="nav-btn" data-page="supplies" onclick="goPage('supplies',this)">
+      <span class="ni"><i class="bi bi-box-seam"></i></span><span>ทะเบียนวัสดุ</span>
+    </button>
+    <div class="nav-sec">รายงาน</div>
+    <button class="nav-btn" data-page="assetvalue" onclick="goPage('assetvalue',this)">
+      <span class="ni"><i class="bi bi-cash-stack"></i></span><span>มูลค่าสินทรัพย์</span>
+    </button>
+    <button class="nav-btn" data-page="report" onclick="goPage('report',this)">
+      <span class="ni"><i class="bi bi-file-earmark-text"></i></span><span>รายงานประจำปี</span>
+    </button>
+  </nav>
+  <div class="sidebar-foot">สสอ.ห้วยเมก · รหัส 05374<br/>Google Apps Script 2568</div>
+</aside>
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <button id="menu-toggle" onclick="sidebarToggle()"><i class="bi bi-list"></i></button>
+  <span id="topbar-title">แดชบอร์ด</span>
+  <div style="display:flex;gap:6px">
+    <button class="t-btn" onclick="refreshPage()" title="รีเฟรช"><i class="bi bi-arrow-clockwise"></i></button>
+    <button class="t-btn" onclick="window.print()" title="พิมพ์"><i class="bi bi-printer"></i></button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+<!-- ===== DASHBOARD ===== -->
+<div id="page-dashboard" class="page show">
+  <div class="ph">
+    <h2><i class="bi bi-speedometer2 me-2"></i>แดชบอร์ด</h2>
+    <p>ภาพรวมครุภัณฑ์และวัสดุ โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านคำใหญ่</p>
+  </div>
+
+  <!-- ── ครุภัณฑ์ stats ── -->
+  <div style="font-family:'Kanit',sans-serif;font-size:13px;font-weight:600;color:var(--primary-dark);margin-bottom:10px;display:flex;align-items:center;gap:8px">
+    <i class="bi bi-archive-fill" style="color:var(--primary)"></i> สรุปครุภัณฑ์
+  </div>
+  <div class="stats">
+    <div class="sc"><div class="sc-ico"><i class="bi bi-archive-fill"></i></div><div class="sc-val" id="st-tot">-</div><div class="sc-lbl">ครุภัณฑ์ทั้งหมด</div></div>
+    <div class="sc a"><div class="sc-ico"><i class="bi bi-check-circle-fill"></i></div><div class="sc-val" id="st-ok">-</div><div class="sc-lbl">ใช้งานได้ปกติ</div></div>
+    <div class="sc r"><div class="sc-ico"><i class="bi bi-exclamation-triangle-fill"></i></div><div class="sc-val" id="st-br">-</div><div class="sc-lbl">ชำรุด/รอจำหน่าย</div></div>
+    <div class="sc b"><div class="sc-ico"><i class="bi bi-currency-exchange"></i></div><div class="sc-val" id="st-val">-</div><div class="sc-lbl">มูลค่ารวม (บาท)</div></div>
+    <div class="sc p"><div class="sc-ico"><i class="bi bi-wrench-adjustable-circle-fill"></i></div><div class="sc-val" id="st-rep">-</div><div class="sc-lbl">รอซ่อมบำรุง</div></div>
+    <div class="sc"><div class="sc-ico"><i class="bi bi-receipt-cutoff"></i></div><div class="sc-val" id="st-rcost">-</div><div class="sc-lbl">ค่าซ่อมสะสม (บาท)</div></div>
+  </div>
+
+  <!-- ── ครุภัณฑ์ charts ── -->
+  <div class="chart-grid" style="margin-bottom:24px">
+    <div class="cbox"><h6><i class="bi bi-pie-chart-fill me-2" style="color:var(--primary)"></i>สัดส่วนครุภัณฑ์ตามประเภท</h6><canvas id="ch-type"></canvas></div>
+    <div class="cbox"><h6><i class="bi bi-bar-chart-fill me-2" style="color:var(--accent)"></i>จำนวนครุภัณฑ์ตามประเภท</h6><canvas id="ch-bar"></canvas></div>
+  </div>
+
+  <!-- ── วัสดุ section ── -->
+  <div style="font-family:'Kanit',sans-serif;font-size:13px;font-weight:600;color:var(--primary-dark);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
+    <span><i class="bi bi-box-seam-fill me-2" style="color:var(--accent)"></i>สรุปวัสดุคงคลัง</span>
+    <button class="btn-s" style="font-size:12px;padding:4px 12px" onclick="goPage('supplies',null)">จัดการวัสดุ</button>
+  </div>
+
+  <!-- ── 3 supply type cards ── -->
+  <div class="sup-dash-grid" id="sup-dash-grid">
+    <!-- filled by JS -->
+  </div>
+
+  <!-- ── วัสดุ charts ── -->
+  <div class="chart-grid" style="margin-bottom:24px">
+    <div class="cbox"><h6><i class="bi bi-bar-chart-steps me-2" style="color:var(--accent)"></i>มูลค่าวัสดุคงเหลือตามประเภท (บาท)</h6><canvas id="ch-sup-val"></canvas></div>
+    <div class="cbox"><h6><i class="bi bi-pie-chart-fill me-2" style="color:#8b5cf6"></i>สัดส่วนรายการวัสดุ</h6><canvas id="ch-sup-pie"></canvas></div>
+  </div>
+
+  <!-- ── ซ่อมบำรุงล่าสุด ── -->
+  <div class="card2">
+    <div class="ch">
+      <h6><i class="bi bi-clock-history me-2"></i>ประวัติซ่อมบำรุงล่าสุด</h6>
+      <button class="btn-s" style="font-size:12px;padding:4px 12px" onclick="goPage('maintenance',null)">ดูทั้งหมด</button>
+    </div>
+    <div class="tw"><table class="tbl"><thead><tr><th>รหัสครุภัณฑ์</th><th>รายการ</th><th>วันที่แจ้งซ่อม</th><th>อาการ</th><th>สถานะ</th></tr></thead>
+    <tbody id="dash-mt"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ===== EQUIPMENT ===== -->
+<div id="page-equipment" class="page">
+  <div class="ph ph-row">
+    <div><h2><i class="bi bi-archive me-2"></i>ทะเบียนครุภัณฑ์</h2><p>บันทึกและจัดการรายการครุภัณฑ์ทุกประเภท</p></div>
+    <div id="print-exclude" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-s" onclick="openImport('equipment')"><i class="bi bi-file-earmark-arrow-up"></i> นำเข้า Excel</button>
+      <button class="btn-p" onclick="openEquipForm(null)"><i class="bi bi-plus-lg"></i> เพิ่มครุภัณฑ์</button>
+    </div>
+  </div>
+  <div class="card2">
+    <div class="fb">
+      <input type="text" id="eq-q" placeholder="🔍 ค้นหา ชื่อ / รหัส / สถานที่..." oninput="filterEq()"/>
+      <select id="eq-ftype" onchange="filterEq()" style="min-width:155px">
+        <option value="">ทุกประเภท</option>
+        <option>ครุภัณฑ์การแพทย์</option><option>ครุภัณฑ์ทันตกรรม</option>
+        <option>คอมพิวเตอร์</option><option>สำนักงาน</option>
+        <option>ครุภัณฑ์งานบ้านครัว</option><option>ยานพาหนะ</option>
+        <option>สิ่งปลูกสร้าง</option><option>อาคารสำนักงาน</option>
+        <option>ที่ดิน</option><option>ครุภัณฑ์โฆษณา</option><option>ไฟฟ้าและวิทยุ</option>
+      </select>
+      <select id="eq-fst" onchange="filterEq()" style="min-width:120px">
+        <option value="">ทุกสถานะ</option><option>ใช้งานปกติ</option><option>ชำรุด</option>
+      </select>
+      <span class="fb-count" id="eq-cnt"></span>
+    </div>
+    <div class="tw" style="max-height:500px;overflow-y:auto">
+      <table class="tbl">
+        <thead><tr><th>#</th><th>รหัสครุภัณฑ์</th><th>ชื่อรายการ</th><th>ประเภท</th>
+          <th>จำนวน</th><th>วันที่ได้มา</th><th>มูลค่า (บาท)</th><th>สถานะ</th><th>สถานที่</th><th></th></tr></thead>
+        <tbody id="eq-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAINTENANCE ===== -->
+<div id="page-maintenance" class="page">
+  <div class="ph ph-row">
+    <div><h2><i class="bi bi-tools me-2"></i>ประวัติการซ่อมบำรุง</h2><p>บันทึกและติดตามประวัติการซ่อมบำรุงครุภัณฑ์</p></div>
+    <button class="btn-p" onclick="openMaintForm(null)" id="print-exclude"><i class="bi bi-plus-lg"></i> บันทึกการซ่อม</button>
+  </div>
+  <div class="card2">
+    <div class="fb">
+      <input type="text" id="mt-q" placeholder="🔍 ค้นหา รหัส / รายการ / อาการ..." oninput="filterMt()"/>
+      <select id="mt-fst" onchange="filterMt()" style="min-width:145px">
+        <option value="">ทุกสถานะ</option><option>รอดำเนินการ</option>
+        <option>กำลังดำเนินการ</option><option>เสร็จสิ้น</option><option>ยกเลิก</option>
+      </select>
+      <span class="fb-count" id="mt-cnt"></span>
+    </div>
+    <div class="tw" style="max-height:500px;overflow-y:auto">
+      <table class="tbl">
+        <thead><tr><th>#</th><th>รหัสครุภัณฑ์</th><th>ชื่อรายการ</th><th>วันที่แจ้งซ่อม</th>
+          <th>อาการ</th><th>ค่าใช้จ่าย</th><th>ผู้รับผิดชอบ</th><th>วันที่เสร็จ</th><th>สถานะ</th><th></th></tr></thead>
+        <tbody id="mt-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SUPPLIES ===== -->
+<div id="page-supplies" class="page">
+  <div class="ph ph-row">
+    <div><h2><i class="bi bi-box-seam me-2"></i>ทะเบียนวัสดุ</h2><p>บันทึกวัสดุสำนักงาน งานบ้านงานครัว และคอมพิวเตอร์</p></div>
+    <div id="print-exclude" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-s" onclick="openImport('supplies')"><i class="bi bi-file-earmark-arrow-up"></i> นำเข้า Excel</button>
+      <button class="btn-p" onclick="openSupplyForm()"><i class="bi bi-plus-lg"></i> เพิ่มรายการวัสดุ</button>
+    </div>
+  </div>
+  <div class="tabs" id="sup-tabs">
+    <div class="tab active" data-stype="สำนักงาน" onclick="switchSupTab('สำนักงาน',this)">📎 วัสดุสำนักงาน</div>
+    <div class="tab" data-stype="งานบ้าน" onclick="switchSupTab('งานบ้าน',this)">🏠 วัสดุงานบ้านครัว</div>
+    <div class="tab" data-stype="คอมพิวเตอร์" onclick="switchSupTab('คอมพิวเตอร์',this)">💻 วัสดุคอมพิวเตอร์</div>
+  </div>
+  <div class="card2">
+    <div class="tw" style="max-height:460px;overflow-y:auto">
+      <table class="tbl"><thead><tr>
+        <th>#</th><th>รหัส</th><th>รายการวัสดุ</th><th>จำนวนยกมา</th>
+        <th>ราคา/หน่วย</th><th>ยอดรับ (บาท)</th><th>ยอดจ่าย (บาท)</th>
+        <th>คงเหลือ</th><th>มูลค่าคงเหลือ (บาท)</th><th></th>
+      </tr></thead>
+      <tbody id="sup-body"></tbody></table>
+    </div>
+    <div id="sup-footer" style="padding:10px 18px;background:#fafdfb;border-top:1px solid #e8f0ee;font-size:12px;color:#6b8c85;display:flex;gap:18px;flex-wrap:wrap"></div>
+  </div>
+</div>
+
+<!-- ===== ASSET VALUE ===== -->
+<div id="page-assetvalue" class="page">
+  <div class="ph ph-row">
+    <div>
+      <h2><i class="bi bi-cash-stack me-2"></i>มูลค่าสินทรัพย์ตามหมวด</h2>
+      <p>แสดงมูลค่าสินทรัพย์และครุภัณฑ์แต่ละประเภท (ตามทะเบียนคุมทรัพย์สินหน่วยงาน)</p>
+    </div>
+    <div id="print-exclude" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <label class="av-date-lbl">ณ วันที่ :</label>
+      <input type="date" id="av-asof" class="form-control" style="width:auto;font-size:13px"/>
+      <button class="btn-p" onclick="loadAssetValue()"><i class="bi bi-arrow-clockwise"></i> อัปเดต</button>
+      <button class="btn-s" onclick="window.print()"><i class="bi bi-printer"></i> พิมพ์</button>
+    </div>
+  </div>
+
+  <div class="av-head">
+    <div class="av-title" id="av-title">รายงานมูลค่าสินทรัพย์ตามทะเบียนคุมทรัพย์สินหน่วยงาน (ราคาทุน)</div>
+    <div class="av-sub">หน่วยงาน : โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านคำใหญ่ &nbsp;|&nbsp; รหัสหน่วยเบิกจ่าย 05374</div>
+    <div class="av-sub" id="av-asof-text" style="margin-top:3px"></div>
+  </div>
+
+  <div style="overflow-x:auto">
+    <table class="av-tbl">
+      <thead>
+        <tr>
+          <th style="width:56px">ลำดับที่</th>
+          <th style="width:130px">รหัสหมวด<br/>สินทรัพย์</th>
+          <th class="left">หมวดสินทรัพย์</th>
+          <th style="width:210px">มูลค่าสินทรัพย์จากทะเบียนคุมทรัพย์สิน<br/>หน่วยงาน (ราคาทุน)<br/><span id="av-asof-inth" style="font-weight:500;font-size:12px"></span></th>
+        </tr>
+      </thead>
+      <tbody id="av-body">
+        <tr><td colspan="4" style="padding:26px;text-align:center;color:#8aaca5">กำลังโหลดข้อมูล...</td></tr>
+      </tbody>
+      <tfoot>
+        <tr class="sum">
+          <td colspan="3" class="ctr">รวม</td>
+          <td class="num" id="av-total">0</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div id="av-detail" class="av-detail">
+    <div class="av-detail-head">
+      <span id="av-detail-title">รายการ</span>
+      <button class="av-close" onclick="closeAvDetail()" title="ปิด"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="tw" style="max-height:360px;overflow-y:auto">
+      <table class="av-detail-tbl">
+        <thead><tr><th>#</th><th>รหัสครุภัณฑ์</th><th>ชื่อรายการ</th><th>ประเภท</th><th>วันที่ได้มา</th><th style="text-align:right">มูลค่า (บาท)</th></tr></thead>
+        <tbody id="av-detail-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REPORT ===== -->
+<div id="page-report" class="page">
+  <div class="ph ph-row" id="print-exclude">
+    <div><h2><i class="bi bi-file-earmark-text me-2"></i>รายงานตรวจสอบพัสดุประจำปี</h2><p>แบบสรุปรายงานผลการตรวจสอบพัสดุและวัสดุ</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <select id="rpt-year" class="form-select" style="width:auto;font-size:13px">
+        <option value="2568" selected>ปีงบประมาณ 2568</option>
+        <option value="2567">ปีงบประมาณ 2567</option>
+      </select>
+      <button class="btn-p" onclick="loadReport()"><i class="bi bi-search"></i> ดูรายงาน</button>
+      <button class="btn-s" onclick="window.print()"><i class="bi bi-printer"></i> พิมพ์ทั้งหมด</button>
+    </div>
+  </div>
+  <!-- Report section tabs -->
+  <div class="tabs" id="rpt-tabs" style="display:none" id="print-exclude">
+    <div class="tab active" data-rtab="eq"   onclick="switchRptTab('eq',this)">📦 ครุภัณฑ์</div>
+    <div class="tab"        data-rtab="off"  onclick="switchRptTab('off',this)">📎 วัสดุสำนักงาน</div>
+    <div class="tab"        data-rtab="home" onclick="switchRptTab('home',this)">🏠 วัสดุงานบ้านงานครัว</div>
+    <div class="tab"        data-rtab="comp" onclick="switchRptTab('comp',this)">💻 วัสดุคอมพิวเตอร์</div>
+    <div class="tab"        data-rtab="all"  onclick="switchRptTab('all',this)">📄 รวมทั้งหมด</div>
+  </div>
+  <div id="rpt-content"><div class="empty"><i class="bi bi-file-earmark-text"></i><p>กดปุ่ม "ดูรายงาน" เพื่อแสดงข้อมูล</p></div></div>
+</div>
+
+</div><!-- end #main -->
+
+<!-- LOADING OVERLAY -->
+<div id="overlay">
+  <div class="spin"></div>
+  <span style="font-size:14px;color:var(--primary-dark);font-weight:600">กำลังโหลดข้อมูล...</span>
+</div>
+
+<!-- ===== EQUIPMENT FORM MODAL ===== -->
+<div class="modal fade" id="eqModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eq-mtitle">เพิ่มครุภัณฑ์</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="padding:18px 22px">
+        <div class="row g-3">
+          <div class="col-md-6"><label class="fl">รหัสครุภัณฑ์ <span class="text-danger">*</span></label><input class="form-control" id="ef-code" placeholder="เช่น 7440-010-0012/1"/></div>
+          <div class="col-md-6"><label class="fl">รหัสสินทรัพย์ GF</label><input class="form-control" id="ef-gf" placeholder="รหัส GF (ถ้ามี)"/></div>
+          <div class="col-12"><label class="fl">ชื่อรายการ/รายละเอียด <span class="text-danger">*</span></label><input class="form-control" id="ef-name" placeholder="ชื่อครุภัณฑ์และรายละเอียด"/></div>
+          <div class="col-md-6">
+            <label class="fl">ประเภทครุภัณฑ์</label>
+            <select class="form-select" id="ef-type">
+              <option>ครุภัณฑ์การแพทย์</option><option>ครุภัณฑ์ทันตกรรม</option><option>คอมพิวเตอร์</option>
+              <option>สำนักงาน</option><option>ครุภัณฑ์งานบ้านครัว</option><option>ยานพาหนะ</option>
+              <option>สิ่งปลูกสร้าง</option><option>อาคารสำนักงาน</option><option>ที่ดิน</option>
+              <option>ครุภัณฑ์โฆษณา</option><option>ไฟฟ้าและวิทยุ</option>
+            </select>
+          </div>
+          <div class="col-md-3"><label class="fl">จำนวน</label><input type="number" class="form-control" id="ef-qty" value="1" min="1"/></div>
+          <div class="col-md-3"><label class="fl">หน่วยนับ</label><input class="form-control" id="ef-unit" placeholder="เครื่อง/ตัว/ชุด"/></div>
+          <div class="col-md-6"><label class="fl">วันที่ได้มา</label><input type="date" class="form-control" id="ef-date"/></div>
+          <div class="col-md-6"><label class="fl">มูลค่าการได้มา (บาท)</label><input type="number" class="form-control" id="ef-val" placeholder="0"/></div>
+          <div class="col-md-4"><label class="fl">สถานะพัสดุ</label>
+            <select class="form-select" id="ef-status"><option>ใช้งานปกติ</option><option>ชำรุด</option></select></div>
+          <div class="col-md-4"><label class="fl">ตรวจพบ/ไม่พบ</label>
+            <select class="form-select" id="ef-found"><option>ตรวจพบ</option><option>พบ</option><option>ไม่พบ</option></select></div>
+          <div class="col-md-4"><label class="fl">สถานที่ตั้ง</label><input class="form-control" id="ef-loc" placeholder="ห้อง/ตำแหน่ง"/></div>
+          <div class="col-12"><label class="fl">หมายเหตุ</label><textarea class="form-control" id="ef-note" rows="2"></textarea></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="ef-row"/>
+        <button class="btn-s" data-bs-dismiss="modal">ยกเลิก</button>
+        <button class="btn-p" onclick="saveEquip()"><i class="bi bi-save"></i> บันทึก</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAINTENANCE FORM MODAL ===== -->
+<div class="modal fade" id="mtModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mt-mtitle">บันทึกการซ่อมบำรุง</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="padding:18px 22px">
+        <div class="row g-3">
+          <div class="col-md-6"><label class="fl">รหัสครุภัณฑ์ <span class="text-danger">*</span></label>
+            <input class="form-control" id="mf-code" list="eq-dl" placeholder="รหัสครุภัณฑ์..."/>
+            <datalist id="eq-dl"></datalist></div>
+          <div class="col-md-6"><label class="fl">ชื่อรายการ</label><input class="form-control" id="mf-name" placeholder="ชื่อครุภัณฑ์"/></div>
+          <div class="col-md-6"><label class="fl">วันที่แจ้งซ่อม</label><input type="date" class="form-control" id="mf-date"/></div>
+          <div class="col-md-6"><label class="fl">วันที่เสร็จสิ้น</label><input type="date" class="form-control" id="mf-done"/></div>
+          <div class="col-12"><label class="fl">อาการชำรุด/ปัญหา <span class="text-danger">*</span></label><textarea class="form-control" id="mf-prob" rows="2" placeholder="อธิบายอาการ..."></textarea></div>
+          <div class="col-12"><label class="fl">วิธีการซ่อม/แก้ไข</label><textarea class="form-control" id="mf-sol" rows="2"></textarea></div>
+          <div class="col-md-4"><label class="fl">ค่าใช้จ่าย (บาท)</label><input type="number" class="form-control" id="mf-cost" value="0"/></div>
+          <div class="col-md-4"><label class="fl">ผู้รับผิดชอบ</label><input class="form-control" id="mf-who" placeholder="ชื่อผู้รับผิดชอบ"/></div>
+          <div class="col-md-4"><label class="fl">สถานะ</label>
+            <select class="form-select" id="mf-status"><option>รอดำเนินการ</option><option>กำลังดำเนินการ</option><option>เสร็จสิ้น</option><option>ยกเลิก</option></select></div>
+          <div class="col-12"><label class="fl">หมายเหตุ</label><textarea class="form-control" id="mf-note" rows="2"></textarea></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="mf-row"/>
+        <button class="btn-s" data-bs-dismiss="modal">ยกเลิก</button>
+        <button class="btn-p" onclick="saveMaint()"><i class="bi bi-save"></i> บันทึก</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SUPPLY FORM MODAL ===== -->
+<div class="modal fade" id="supModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">เพิ่มรายการวัสดุ</h5><button class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body" style="padding:18px 22px">
+        <div class="row g-3">
+          <div class="col-12"><label class="fl">ประเภทวัสดุ</label>
+            <select class="form-select" id="sf-type"><option value="สำนักงาน">วัสดุสำนักงาน</option><option value="งานบ้าน">วัสดุงานบ้านงานครัว</option><option value="คอมพิวเตอร์">วัสดุคอมพิวเตอร์</option></select></div>
+          <div class="col-md-5"><label class="fl">รหัสวัสดุ</label><input class="form-control" id="sf-code" placeholder="รหัส (ถ้ามี)"/></div>
+          <div class="col-md-7"><label class="fl">รายการวัสดุ <span class="text-danger">*</span></label><input class="form-control" id="sf-name" placeholder="ชื่อรายการวัสดุ"/></div>
+          <div class="col-md-4"><label class="fl">จำนวนยกมา</label><input type="number" class="form-control" id="sf-bal" value="0"/></div>
+          <div class="col-md-4"><label class="fl">จำนวนรับ</label><input type="number" class="form-control" id="sf-in" value="0"/></div>
+          <div class="col-md-4"><label class="fl">จำนวนจ่าย</label><input type="number" class="form-control" id="sf-out" value="0"/></div>
+          <div class="col-12"><label class="fl">ราคาต่อหน่วย (บาท)</label><input type="number" class="form-control" id="sf-price" placeholder="0"/></div>
+          <div class="col-12"><label class="fl">หมายเหตุ</label><textarea class="form-control" id="sf-note" rows="2"></textarea></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-s" data-bs-dismiss="modal">ยกเลิก</button>
+        <button class="btn-p" onclick="saveSupply()"><i class="bi bi-save"></i> บันทึก</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EXCEL IMPORT MODAL ===== -->
+<div class="modal fade" id="impModal" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imp-title"><i class="bi bi-file-earmark-arrow-up me-2"></i>นำเข้าข้อมูลจาก Excel</h5>
+        <button class="btn-close" data-bs-dismiss="modal" onclick="resetImp()"></button>
+      </div>
+      <div class="modal-body" style="padding:18px 22px">
+        <!-- Steps -->
+        <div class="step-wrap">
+          <div class="step-item"><div class="step-dot cur" id="sd1">1</div><div class="step-lbl">เลือกไฟล์</div></div>
+          <div class="step-line" id="sl1"></div>
+          <div class="step-item"><div class="step-dot" id="sd2">2</div><div class="step-lbl">จับคู่คอลัมน์</div></div>
+          <div class="step-line" id="sl2"></div>
+          <div class="step-item"><div class="step-dot" id="sd3">3</div><div class="step-lbl">ตรวจสอบ</div></div>
+          <div class="step-line" id="sl3"></div>
+          <div class="step-item"><div class="step-dot" id="sd4">4</div><div class="step-lbl">นำเข้า</div></div>
+        </div>
+
+        <!-- Step 1: File select -->
+        <div class="imp-step show" id="is1">
+          <!-- Type selector -->
+          <div style="margin-bottom:14px">
+            <label class="fl" style="font-size:13px">ประเภทข้อมูล</label>
+            <div style="display:flex;gap:10px;margin-top:7px;flex-wrap:wrap">
+              <label id="itype-eq" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:9px 16px;border:2px solid #cddbd7;border-radius:9px;transition:all .2s">
+                <input type="radio" name="itype" value="equipment" onchange="setImpType('equipment')" style="accent-color:var(--primary)"/>
+                <i class="bi bi-archive" style="color:var(--primary);font-size:17px"></i>
+                <span style="font-weight:600;font-size:13px">ครุภัณฑ์</span>
+              </label>
+              <label id="itype-sup" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:9px 16px;border:2px solid #cddbd7;border-radius:9px;transition:all .2s">
+                <input type="radio" name="itype" value="supplies" onchange="setImpType('supplies')" style="accent-color:var(--primary)"/>
+                <i class="bi bi-box-seam" style="color:var(--accent);font-size:17px"></i>
+                <span style="font-weight:600;font-size:13px">วัสดุ</span>
+              </label>
+            </div>
+            <div id="sup-itype-row" style="display:none;margin-top:9px">
+              <label class="fl" style="font-size:12px">ประเภทวัสดุ</label>
+              <select id="imp-stype" class="form-select" style="width:auto;font-size:13px;margin-top:4px">
+                <option value="สำนักงาน">วัสดุสำนักงาน</option>
+                <option value="งานบ้าน">วัสดุงานบ้านงานครัว</option>
+                <option value="คอมพิวเตอร์">วัสดุคอมพิวเตอร์</option>
+              </select>
+            </div>
+          </div>
+          <!-- Drop zone -->
+          <div class="dropzone" id="dz" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event)">
+            <input type="file" id="file-inp" accept=".xlsx,.xls,.csv" onchange="fileSelected(event)"/>
+            <div class="dz-ico"><i class="bi bi-file-earmark-excel"></i></div>
+            <p><strong>ลากไฟล์มาวางที่นี่</strong> หรือคลิกเพื่อเลือกไฟล์</p>
+            <small>รองรับ .xlsx, .xls, .csv | ไม่เกิน 15MB</small>
+          </div>
+          <div style="text-align:right;margin-top:7px">
+            <button onclick="dlTemplate()" style="border:none;background:none;color:var(--primary);font-size:12px;cursor:pointer;text-decoration:underline">
+              <i class="bi bi-download me-1"></i>ดาวน์โหลด Template ตัวอย่าง
+            </button>
+          </div>
+          <!-- File info -->
+          <div id="fi-bar" style="display:none;margin-top:10px">
+            <div class="fi-bar">
+              <i class="bi bi-file-earmark-check-fill" style="font-size:20px"></i>
+              <div style="flex:1"><div style="font-weight:600" id="fi-name">-</div><div style="font-size:11px;color:#4b8b72" id="fi-size">-</div></div>
+              <button onclick="clearFile()" style="border:none;background:none;color:#b93a0a;cursor:pointer;font-size:16px"><i class="bi bi-x-circle"></i></button>
+            </div>
+          </div>
+          <!-- Sheet selector -->
+          <div id="sht-sel" style="display:none;margin-top:12px">
+            <label class="fl" style="font-size:12px">เลือกชีท</label>
+            <div id="sht-btns" style="display:flex;flex-wrap:wrap;gap:7px;margin-top:6px"></div>
+          </div>
+          <!-- Row config -->
+          <div id="row-cfg" style="display:none;margin-top:12px">
+            <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end">
+              <div><label class="fl" style="font-size:12px">แถว Header (หัวคอลัมน์)</label>
+                <input type="number" id="hrow" class="form-control" value="1" min="1" max="20" style="width:85px;font-size:13px" oninput="reParse()"/></div>
+              <div><label class="fl" style="font-size:12px">เริ่มข้อมูลจากแถวที่</label>
+                <input type="number" id="drow" class="form-control" value="2" min="1" max="20" style="width:85px;font-size:13px" oninput="reParse()"/></div>
+              <div><label class="fl" style="font-size:12px">พบข้อมูล</label>
+                <div style="font-size:19px;font-weight:700;color:var(--primary);padding:5px 0" id="row-cnt">0 แถว</div></div>
+            </div>
+          </div>
+          <!-- Mini preview -->
+          <div id="mini-pvw" style="display:none;margin-top:14px">
+            <div style="font-size:12px;font-weight:600;color:var(--primary-dark);margin-bottom:6px"><i class="bi bi-eye me-1"></i>ตัวอย่างข้อมูล (5 แถวแรก)</div>
+            <div class="pvw" id="mini-pvw-content"></div>
+          </div>
+        </div>
+
+        <!-- Step 2: Column Mapping -->
+        <div class="imp-step" id="is2">
+          <div style="background:#fff8e1;border:1px solid #ffd97d;border-radius:7px;padding:9px 13px;font-size:12px;color:#7a5c00;margin-bottom:12px;display:flex;gap:7px">
+            <i class="bi bi-info-circle-fill" style="flex-shrink:0;margin-top:1px"></i>
+            <span>ระบบจับคู่คอลัมน์อัตโนมัติ ปรับเปลี่ยนได้ตามต้องการ คอลัมน์ที่ไม่ต้องการนำเข้าให้เลือก <strong>"— ข้าม —"</strong></span>
+          </div>
+          <div style="overflow-x:auto"><table class="cmt"><thead><tr><th>#</th><th>คอลัมน์ใน Excel</th><th>ตัวอย่างข้อมูล</th><th>จับคู่กับฟิลด์</th><th style="text-align:center">สถานะ</th></tr></thead>
+          <tbody id="cmap-body"></tbody></table></div>
+        </div>
+
+        <!-- Step 3: Preview -->
+        <div class="imp-step" id="is3">
+          <div class="rc-info">
+            <div class="rc-box"><div class="rv" id="rc-tot">0</div><div class="rl">แถวทั้งหมด</div></div>
+            <div class="rc-box ok"><div class="rv" id="rc-ok">0</div><div class="rl">ถูกต้อง</div></div>
+            <div class="rc-box bad"><div class="rv" id="rc-bad">0</div><div class="rl">ข้อมูลไม่ครบ</div></div>
+          </div>
+          <div style="font-size:12px;font-weight:600;color:var(--primary-dark);margin-bottom:7px"><i class="bi bi-table me-1"></i>ตัวอย่างข้อมูล (สูงสุด 20 แถว)</div>
+          <div class="pvw" id="conf-pvw" style="max-height:280px"></div>
+        </div>
+
+        <!-- Step 4: Progress -->
+        <div class="imp-step" id="is4">
+          <div style="text-align:center;padding:14px 0 8px">
+            <div style="font-size:38px;margin-bottom:8px" id="imp-ico">⏳</div>
+            <div style="font-size:15px;font-weight:600;color:var(--primary-dark)" id="imp-prog-txt">กำลังนำเข้าข้อมูล...</div>
+            <div style="font-size:12.5px;color:#6b8c85;margin-top:3px" id="imp-prog-sub"></div>
+          </div>
+          <div class="imp-prog"><div class="imp-bar" id="imp-bar"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:#8aaca5;margin-bottom:10px">
+            <span id="imp-cnt">0 / 0</span><span id="imp-pct">0%</span>
+          </div>
+          <div class="imp-log" id="imp-log"></div>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between">
+        <div><button class="btn-s" id="imp-back" onclick="impBack()" style="display:none"><i class="bi bi-chevron-left"></i> ย้อนกลับ</button></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-s" data-bs-dismiss="modal" onclick="resetImp()" id="imp-cancel">ยกเลิก</button>
+          <button class="btn-p" id="imp-next" onclick="impNext()" disabled>ถัดไป <i class="bi bi-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+'use strict';
+// ═══════════════════════════════════════════════════
+// GAS BRIDGE — works in GAS and standalone demo
+// ═══════════════════════════════════════════════════
+function gas(fn, ...args) {
+  return new Promise((resolve) => {
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      const runner = google.script.run
+        .withSuccessHandler(r => resolve(r))
+        .withFailureHandler(e => resolve({ success:false, error: e.message || String(e) }));
+      runner[fn](...args);
+    } else {
+      // Demo mode
+      setTimeout(() => resolve(demoRes(fn, args)), 280);
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// DEMO DATA
+// ═══════════════════════════════════════════════════
+const DEMO_EQ = [
+  {_row:2,'ลำดับ':1,'รหัสครุภัณฑ์':'6515-069-0008/2','รหัสสินทรัพย์GF':'','ชื่อรายการ/รายละเอียด':'เครื่องวัดความดันโลหิต ดิจิตอล สอดแขน พร้อมเครื่องพิมพ์','ประเภทครุภัณฑ์':'ครุภัณฑ์การแพทย์','จำนวนหน่วย':1,'หน่วยนับ':'เครื่อง','วันที่ได้มา':'2568-09-30','มูลค่าการได้มา':64000,'สถานะพัสดุ':'ใช้งานปกติ','ตรวจพบ/ไม่พบ':'ตรวจพบ','หมายเหตุ':'','สถานที่ตั้ง':'ห้องตรวจ'},
+  {_row:3,'ลำดับ':2,'รหัสครุภัณฑ์':'7440-010-0012/1','รหัสสินทรัพย์GF':'','ชื่อรายการ/รายละเอียด':'เครื่องปริ้นสติกเกอร์ยา','ประเภทครุภัณฑ์':'คอมพิวเตอร์','จำนวนหน่วย':1,'หน่วยนับ':'เครื่อง','วันที่ได้มา':'2567-05-27','มูลค่าการได้มา':13000,'สถานะพัสดุ':'ใช้งานปกติ','ตรวจพบ/ไม่พบ':'ตรวจพบ','หมายเหตุ':'','สถานที่ตั้ง':'ห้อง IT'},
+  {_row:4,'ลำดับ':3,'รหัสครุภัณฑ์':'6520-007-0001','รหัสสินทรัพย์GF':'','ชื่อรายการ/รายละเอียด':'ยูนิตทำฟัน (เก่า)','ประเภทครุภัณฑ์':'ครุภัณฑ์ทันตกรรม','จำนวนหน่วย':1,'หน่วยนับ':'เครื่อง','วันที่ได้มา':'2557-12-31','มูลค่าการได้มา':400000,'สถานะพัสดุ':'ชำรุด','ตรวจพบ/ไม่พบ':'ตรวจพบ','หมายเหตุ':'รอจำหน่าย','สถานที่ตั้ง':'ห้องเก็บของ'},
+  {_row:5,'ลำดับ':4,'รหัสครุภัณฑ์':'6515-027-0001','รหัสสินทรัพย์GF':'','ชื่อรายการ/รายละเอียด':'เครื่องอัลตราซาวด์เคลื่อนที่','ประเภทครุภัณฑ์':'ครุภัณฑ์การแพทย์','จำนวนหน่วย':1,'หน่วยนับ':'ตัว','วันที่ได้มา':'2566-01-18','มูลค่าการได้มา':465000,'สถานะพัสดุ':'ใช้งานปกติ','ตรวจพบ/ไม่พบ':'พบ','หมายเหตุ':'','สถานที่ตั้ง':'ห้องฝากครรภ์'},
+  {_row:6,'ลำดับ':5,'รหัสครุภัณฑ์':'2340-003-0001/1','รหัสสินทรัพย์GF':'','ชื่อรายการ/รายละเอียด':'รถจักรยานยนต์ YAMAHA 110 cc 2 จังหวะ','ประเภทครุภัณฑ์':'ยานพาหนะ','จำนวนหน่วย':1,'หน่วยนับ':'คัน','วันที่ได้มา':'2557-01-01','มูลค่าการได้มา':28000,'สถานะพัสดุ':'ชำรุด','ตรวจพบ/ไม่พบ':'พบ','หมายเหตุ':'รอจำหน่าย','สถานที่ตั้ง':'หน้าอาคาร'},
+  {_row:7,'ลำดับ':6,'รหัสครุภัณฑ์':'6520-007-0002','รหัสสินทรัพย์GF':'','ชื่อรายการ/รายละเอียด':'ยูนิตทำฟัน (ใหม่)','ประเภทครุภัณฑ์':'ครุภัณฑ์ทันตกรรม','จำนวนหน่วย':1,'หน่วยนับ':'เครื่อง','วันที่ได้มา':'2565-04-29','มูลค่าการได้มา':459500,'สถานะพัสดุ':'ใช้งานปกติ','ตรวจพบ/ไม่พบ':'ตรวจพบ','หมายเหตุ':'','สถานที่ตั้ง':'ห้องทันตกรรม'},
+  {_row:8,'ลำดับ':7,'รหัสครุภัณฑ์':'6530-009-0003/1','รหัสสินทรัพย์GF':'','ชื่อรายการ/รายละเอียด':'เครื่องชั่งน้ำหนักเด็กทารก ชนิดนอนพร้อมที่วัดส่วนสูง','ประเภทครุภัณฑ์':'ครุภัณฑ์การแพทย์','จำนวนหน่วย':1,'หน่วยนับ':'เครื่อง','วันที่ได้มา':'2567-05-23','มูลค่าการได้มา':15000,'สถานะพัสดุ':'ใช้งานปกติ','ตรวจพบ/ไม่พบ':'ตรวจพบ','หมายเหตุ':'','สถานที่ตั้ง':'ห้องตรวจ'},
+];
+const DEMO_MT = [
+  {_row:2,'ลำดับ':1,'รหัสครุภัณฑ์':'6515-027-0001','ชื่อรายการ':'เครื่องอัลตราซาวด์','วันที่แจ้งซ่อม':'2568-05-10','อาการชำรุด/ปัญหา':'หน้าจอกระพริบ','วิธีการซ่อม/แก้ไข':'เปลี่ยนสายไฟ','ค่าใช้จ่าย (บาท)':1500,'ผู้รับผิดชอบ':'นางสาวกชพรพรรณ','วันที่เสร็จสิ้น':'2568-05-15','สถานะการซ่อม':'เสร็จสิ้น','หมายเหตุ':''},
+  {_row:3,'ลำดับ':2,'รหัสครุภัณฑ์':'7440-010-0012/1','ชื่อรายการ':'เครื่องปริ้นสติกเกอร์','วันที่แจ้งซ่อม':'2568-07-20','อาการชำรุด/ปัญหา':'กระดาษติดบ่อย','วิธีการซ่อม/แก้ไข':'ทำความสะอาดลูกกลิ้ง','ค่าใช้จ่าย (บาท)':0,'ผู้รับผิดชอบ':'นางปาริชาติ','วันที่เสร็จสิ้น':'2568-07-20','สถานะการซ่อม':'เสร็จสิ้น','หมายเหตุ':''},
+  {_row:4,'ลำดับ':3,'รหัสครุภัณฑ์':'6515-069-0008/2','ชื่อรายการ':'เครื่องวัดความดัน','วันที่แจ้งซ่อม':'2568-09-01','อาการชำรุด/ปัญหา':'ค่าการวัดไม่แม่นยำ','วิธีการซ่อม/แก้ไข':'ส่งศูนย์บริการ','ค่าใช้จ่าย (บาท)':2000,'ผู้รับผิดชอบ':'นางจารวี','วันที่เสร็จสิ้น':'','สถานะการซ่อม':'รอดำเนินการ','หมายเหตุ':'รอรับคืนจากศูนย์'},
+];
+const DEMO_SUP_OFF = [
+  {_row:2,'รายการวัสดุ':'กระดาษ A4 Double A','ประเภทวัสดุ':'สำนักงาน','จำนวนยกมา':47,'ราคาต่อหน่วย':115,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':575,'จำนวนคงเหลือ':42,'ยอดคงเหลือ(บาท)':4830},
+  {_row:3,'รายการวัสดุ':'ลวดเสียบกระดาษ กล่อง 50 ตัว','ประเภทวัสดุ':'สำนักงาน','จำนวนยกมา':26,'ราคาต่อหน่วย':10,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':10,'จำนวนคงเหลือ':25,'ยอดคงเหลือ(บาท)':250},
+  {_row:4,'รายการวัสดุ':'คลิปหนีบกระดาษ No.112','ประเภทวัสดุ':'สำนักงาน','จำนวนยกมา':11,'ราคาต่อหน่วย':20,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':40,'จำนวนคงเหลือ':9,'ยอดคงเหลือ(บาท)':180},
+  {_row:5,'รายการวัสดุ':'กาว 2 หน้าหนา 3 เมตร','ประเภทวัสดุ':'สำนักงาน','จำนวนยกมา':6,'ราคาต่อหน่วย':120,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':120,'จำนวนคงเหลือ':5,'ยอดคงเหลือ(บาท)':600},
+  {_row:6,'รายการวัสดุ':'คัตเตอร์เหล็กตราช้าง','ประเภทวัสดุ':'สำนักงาน','จำนวนยกมา':9,'ราคาต่อหน่วย':65,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':130,'จำนวนคงเหลือ':7,'ยอดคงเหลือ(บาท)':455},
+];
+const DEMO_SUP_HOME = [
+  {_row:2,'รายการวัสดุ':'ผงซักฟอก 1900 กรัม','ประเภทวัสดุ':'งานบ้าน','จำนวนยกมา':12,'ราคาต่อหน่วย':190,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':380,'จำนวนคงเหลือ':10,'ยอดคงเหลือ(บาท)':1900},
+  {_row:3,'รายการวัสดุ':'น้ำยาดันฝุ่น','ประเภทวัสดุ':'งานบ้าน','จำนวนยกมา':12,'ราคาต่อหน่วย':150,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':300,'จำนวนคงเหลือ':10,'ยอดคงเหลือ(บาท)':1500},
+  {_row:4,'รายการวัสดุ':'ถุงดำ 30*40','ประเภทวัสดุ':'งานบ้าน','จำนวนยกมา':10,'ราคาต่อหน่วย':66,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':198,'จำนวนคงเหลือ':7,'ยอดคงเหลือ(บาท)':462},
+  {_row:5,'รายการวัสดุ':'สบู่ล้างมือ','ประเภทวัสดุ':'งานบ้าน','จำนวนยกมา':6,'ราคาต่อหน่วย':15,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':30,'จำนวนคงเหลือ':4,'ยอดคงเหลือ(บาท)':60},
+  {_row:6,'รายการวัสดุ':'ผ้าเช็ดมือ','ประเภทวัสดุ':'งานบ้าน','จำนวนยกมา':13,'ราคาต่อหน่วย':230,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':460,'จำนวนคงเหลือ':11,'ยอดคงเหลือ(บาท)':2530},
+];
+const DEMO_SUP_COMP = [
+  {_row:2,'รายการวัสดุ':'ตลับหมึกแท้ HP 76A','ประเภทวัสดุ':'คอมพิวเตอร์','จำนวนยกมา':3,'ราคาต่อหน่วย':3600,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':0,'จำนวนคงเหลือ':3,'ยอดคงเหลือ(บาท)':10800},
+  {_row:3,'รายการวัสดุ':'หมึกแท้ Brother BT5000C','ประเภทวัสดุ':'คอมพิวเตอร์','จำนวนยกมา':1,'ราคาต่อหน่วย':350,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':0,'จำนวนคงเหลือ':1,'ยอดคงเหลือ(บาท)':350},
+  {_row:4,'รายการวัสดุ':'ชุดคีย์บอร์ดและเม้าส์ไร้สาย','ประเภทวัสดุ':'คอมพิวเตอร์','จำนวนยกมา':2,'ราคาต่อหน่วย':590,'ยอดรับ(บาท)':0,'ยอดจ่าย(บาท)':295,'จำนวนคงเหลือ':1,'ยอดคงเหลือ(บาท)':590},
+];
+const DEMO_SUP = DEMO_SUP_OFF;
+
+function demoRes(fn, args) {
+  switch(fn) {
+    case 'getEquipment':   return { success:true, data: JSON.parse(JSON.stringify(DEMO_EQ)) };
+    case 'getMaintenance': return { success:true, data: JSON.parse(JSON.stringify(DEMO_MT)) };
+    case 'getSupplies': {
+      const t = args && args[0];
+      const map = {'สำนักงาน':DEMO_SUP_OFF,'งานบ้าน':DEMO_SUP_HOME,'คอมพิวเตอร์':DEMO_SUP_COMP};
+      return { success:true, data: JSON.parse(JSON.stringify(map[t]||DEMO_SUP_OFF)) };
+    }
+    case 'getDashboardData': {
+      const byType = {};
+      DEMO_EQ.forEach(r => {
+        const t = r['ประเภทครุภัณฑ์']||'อื่นๆ';
+        if (!byType[t]) byType[t]={count:0,value:0,damaged:0};
+        byType[t].count++; byType[t].value += Number(r['มูลค่าการได้มา'])||0;
+        if (r['สถานะพัสดุ']==='ชำรุด') byType[t].damaged++;
+      });
+      const calcSup = (arr) => ({
+        count: arr.length,
+        totalQty: arr.reduce((s,r)=>s+(Number(r['จำนวนคงเหลือ'])||0),0),
+        totalValue: arr.reduce((s,r)=>s+(Number(r['ยอดคงเหลือ(บาท)'])||0),0),
+        items: arr.map(r=>({name:r['รายการวัสดุ'],qty:r['จำนวนคงเหลือ'],val:r['ยอดคงเหลือ(บาท)']}))
+      });
+      return { success:true,
+        stats:{total:DEMO_EQ.length, active:DEMO_EQ.filter(r=>r['สถานะพัสดุ']==='ใช้งานปกติ').length,
+          damaged:DEMO_EQ.filter(r=>r['สถานะพัสดุ']==='ชำรุด').length,
+          totalValue:DEMO_EQ.reduce((s,r)=>s+(Number(r['มูลค่าการได้มา'])||0),0),
+          pendingRepair:DEMO_MT.filter(r=>r['สถานะการซ่อม']==='รอดำเนินการ').length,
+          repairCost:DEMO_MT.reduce((s,r)=>s+(Number(r['ค่าใช้จ่าย (บาท)'])||0),0)},
+        byType,
+        supplyStats:{ สำนักงาน:calcSup(DEMO_SUP_OFF), งานบ้าน:calcSup(DEMO_SUP_HOME), คอมพิวเตอร์:calcSup(DEMO_SUP_COMP) },
+        recentMaint:JSON.parse(JSON.stringify(DEMO_MT)).reverse().slice(0,5) };
+    }
+    case 'getAssetValueByCategory': {
+      const CATS = [
+        { code:'12050100', name:'อาคารพักอาศัย',        keys:['อาคารพักอาศัย','บ้านพัก','หอพัก'] },
+        { code:'12050200', name:'อาคารสำนักงาน',        keys:['อาคารสำนักงาน','อาคาร'] },
+        { code:'12050300', name:'อาคารประโยชน์อื่นๆ',    keys:['อาคารประโยชน์','อาคารอื่น','โรงเก็บของ'] },
+        { code:'12050400', name:'สิ่งปลูกสร้าง',         keys:['สิ่งปลูกสร้าง','รั้ว','ป้าย','ลาน'] },
+        { code:'12060100', name:'ครุภัณฑ์สนง.',          keys:['ครุภัณฑ์สำนักงาน','สำนักงาน'] },
+        { code:'12060200', name:'ครุภัณฑ์ยานพาหนะ',      keys:['ยานพาหนะ','รถยนต์','รถจักรยานยนต์','รถ'] },
+        { code:'12060300', name:'ครุภัณฑ์ไฟฟ้า',         keys:['ไฟฟ้า','วิทยุ'] },
+        { code:'12060400', name:'ครุภัณฑ์โฆษณา',         keys:['โฆษณา','เผยแพร่','โปรเจคเตอร์','มัลติมีเดีย'] },
+        { code:'12060500', name:'ครุภัณฑ์การเกษตร',      keys:['การเกษตร','เกษตร'] },
+        { code:'12060900', name:'ครุภัณฑ์วิทยาศาสตร์',   keys:['วิทยาศาสตร์','การแพทย์','ทันตกรรม'] },
+        { code:'12061000', name:'ครุภัณฑ์คอมพิวเตอร์',   keys:['คอมพิวเตอร์','computer','it'] },
+        { code:'12061200', name:'ครุภัณฑ์งานบ้าน',       keys:['งานบ้าน','งานครัว'] },
+        { code:'12061600', name:'ครุภัณฑ์อื่นๆ',          keys:['อื่นๆ','อื่น ๆ'] },
+        { code:'12090100', name:'สินทรัพย์-software',    keys:['software','ซอฟต์แวร์','โปรแกรม'] },
+        { code:'12110100', name:'งานระหว่างทำ',          keys:['ระหว่างทำ'] },
+      ];
+      const priority = ['12061000','12060200','12060400','12060300','12061200','12060500','12060900','12050400','12050200','12050100','12050300','12090100','12110100','12060100','12061600'];
+      function matchCat(t) {
+        if (!t) return '12061600';
+        const tl = String(t).toLowerCase().trim();
+        for (const code of priority) {
+          const c = CATS.find(x=>x.code===code); if (!c) continue;
+          for (const k of c.keys) { if (tl.includes(k.toLowerCase())) return c.code; }
+        }
+        return '12061600';
+      }
+      const sum = {};
+      CATS.forEach(c => sum[c.code] = { code:c.code, name:c.name, count:0, value:0, items:[] });
+      DEMO_EQ.forEach(r => {
+        const code = matchCat(r['ประเภทครุภัณฑ์']||'');
+        if (!sum[code]) sum[code] = { code, name:'(ไม่ระบุ)', count:0, value:0, items:[] };
+        sum[code].count++;
+        sum[code].value += Number(r['มูลค่าการได้มา'])||0;
+        sum[code].items.push({
+          name: r['ชื่อรายการ/รายละเอียด']||'',
+          code: r['รหัสครุภัณฑ์']||'',
+          type: r['ประเภทครุภัณฑ์']||'',
+          value: Number(r['มูลค่าการได้มา'])||0,
+          date: r['วันที่ได้มา']||''
+        });
+      });
+      const rows = CATS.map((c,i)=>({
+        seq:i+1, code:c.code, name:c.name,
+        count:sum[c.code].count, value:sum[c.code].value, items:sum[c.code].items
+      }));
+      return {
+        success:true,
+        asOfDate: (args&&args[0]) || new Date().toISOString().split('T')[0],
+        rows,
+        totalValue: rows.reduce((s,r)=>s+r.value,0),
+        totalCount: rows.reduce((s,r)=>s+r.count,0)
+      };
+    }
+    case 'getAnnualReport': {
+      const byType = {};
+      DEMO_EQ.forEach(r => {
+        const t = r['ประเภทครุภัณฑ์']||'อื่นๆ';
+        if (!byType[t]) byType[t]={total:0,found:0,damaged:0,notFound:0};
+        byType[t].total++;
+        const f = r['ตรวจพบ/ไม่พบ']||'';
+        if (f==='ตรวจพบ'||f==='พบ') byType[t].found++;
+        if (r['สถานะพัสดุ']==='ชำรุด') byType[t].damaged++;
+        if (f==='ไม่พบ') byType[t].notFound++;
+      });
+      return {
+        success:true,
+        year: args[0]||'2568',
+        eqData: JSON.parse(JSON.stringify(DEMO_EQ)),
+        byType,
+        supData: {
+          สำนักงาน: JSON.parse(JSON.stringify(DEMO_SUP_OFF)),
+          งานบ้าน:  JSON.parse(JSON.stringify(DEMO_SUP_HOME)),
+          คอมพิวเตอร์: JSON.parse(JSON.stringify(DEMO_SUP_COMP)),
+        }
+      };
+    }
+    default: return { success:true };
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let S = {
+  page: 'dashboard',
+  eqAll: [], mtAll: [], supAll: [],
+  supTab: 'สำนักงาน',
+  charts: {},
+};
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+const PAGE_TITLES = {
+  dashboard:'แดชบอร์ด', equipment:'ทะเบียนครุภัณฑ์',
+  maintenance:'ประวัติการซ่อมบำรุง', supplies:'ทะเบียนวัสดุ',
+  assetvalue:'มูลค่าสินทรัพย์ตามหมวด', report:'รายงานประจำปี'
+};
+function goPage(name, btn) {
+  // Update active page visibility
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('show'));
+  const pg = document.getElementById('page-' + name);
+  if (pg) pg.classList.add('show');
+  // Update nav active state
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else {
+    const nb = document.querySelector(`.nav-btn[data-page="${name}"]`);
+    if (nb) nb.classList.add('active');
+  }
+  document.getElementById('topbar-title').textContent = PAGE_TITLES[name] || name;
+  S.page = name;
+  sidebarClose();
+  // Load data for page
+  if (name === 'dashboard')   loadDash();
+  if (name === 'equipment')   loadEq();
+  if (name === 'maintenance') loadMt();
+  if (name === 'supplies')    loadSup(S.supTab);
+  if (name === 'assetvalue')  loadAssetValue();
+  // report loads on demand
+}
+function refreshPage() { goPage(S.page, null); }
+
+// ═══════════════════════════════════════════════════
+// SIDEBAR
+// ═══════════════════════════════════════════════════
+function sidebarToggle() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sov').classList.toggle('open');
+}
+function sidebarClose() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sov').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════
+// LOADING
+// ═══════════════════════════════════════════════════
+function showLoad(v) { document.getElementById('overlay').style.display = v ? 'flex' : 'none'; }
+
+// ═══════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════
+function esc(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmt(n, short) {
+  const num = Number(n) || 0;
+  if (short && num >= 1000000) return (num/1000000).toFixed(2)+'M';
+  if (short && num >= 1000) return (num/1000).toFixed(1)+'K';
+  return num.toLocaleString('th-TH');
+}
+function bsEq(s) {
+  return s === 'ชำรุด'
+    ? '<span class="bs bs-bad"><i class="bi bi-exclamation-circle"></i> ชำรุด</span>'
+    : '<span class="bs bs-ok"><i class="bi bi-check-circle"></i> ใช้งานปกติ</span>';
+}
+function bsMt(s) {
+  if (s==='รอดำเนินการ') return `<span class="bs bs-wait">${esc(s)}</span>`;
+  if (s==='เสร็จสิ้น')  return `<span class="bs bs-done">${esc(s)}</span>`;
+  if (s==='กำลังดำเนินการ') return `<span class="bs bs-prog">${esc(s)}</span>`;
+  return `<span class="bs" style="background:#f3f4f6;color:#666">${esc(s)||'-'}</span>`;
+}
+function toast(icon, title) { Swal.fire({icon, title, timer:1600, showConfirmButton:false, toast:true, position:'top-end'}); }
+function confirm2(title, text, cb) {
+  Swal.fire({icon:'warning',title,text,showCancelButton:true,confirmButtonColor:'#e05c1e',
+    cancelButtonColor:'#6c757d',confirmButtonText:'ยืนยัน',cancelButtonText:'ยกเลิก'})
+    .then(r => { if (r.isConfirmed) cb(); });
+}
+function errAlert(msg) { Swal.fire({icon:'error',title:'เกิดข้อผิดพลาด',text:msg,confirmButtonColor:'var(--primary)'}); }
+
+// ═══════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════
+async function loadDash() {
+  showLoad(true);
+  const r = await gas('getDashboardData');
+  showLoad(false);
+  if (!r.success) { errAlert(r.error||'โหลด Dashboard ไม่สำเร็จ'); return; }
+  const s = r.stats;
+  document.getElementById('st-tot').textContent   = s.total;
+  document.getElementById('st-ok').textContent    = s.active;
+  document.getElementById('st-br').textContent    = s.damaged;
+  document.getElementById('st-val').textContent   = fmt(s.totalValue, true);
+  document.getElementById('st-rep').textContent   = s.pendingRepair;
+  document.getElementById('st-rcost').textContent = fmt(s.repairCost, true);
+  document.getElementById('eq-badge').textContent = s.total;
+  buildCharts(r.byType);
+  buildSupplyDash(r.supplyStats || {});
+  buildDashMt(r.recentMaint);
+}
+
+const COLORS = ['#0f6b58','#1a9478','#f4a015','#e05c1e','#2196f3','#8b5cf6','#22c55e','#f43f5e','#06b6d4','#84cc16','#a855f7'];
+const SUP_COLORS = { สำนักงาน:'#f4a015', งานบ้าน:'#22c55e', คอมพิวเตอร์:'#2196f3' };
+const SUP_ICO    = { สำนักงาน:'📎', งานบ้าน:'🏠', คอมพิวเตอร์:'💻' };
+const SUP_BG     = { สำนักงาน:'rgba(244,160,21,.08)', งานบ้าน:'rgba(34,197,94,.08)', คอมพิวเตอร์:'rgba(33,150,243,.08)' };
+
+function buildCharts(byType) {
+  const labels = Object.keys(byType);
+  const counts = labels.map(l => byType[l].count);
+  if (S.charts.pie) S.charts.pie.destroy();
+  if (S.charts.bar) S.charts.bar.destroy();
+  const baseOpt = { responsive:true, maintainAspectRatio:true,
+    plugins:{ legend:{ position:'bottom', labels:{ font:{family:'Sarabun',size:10}, boxWidth:11, padding:8 } } } };
+  S.charts.pie = new Chart(document.getElementById('ch-type').getContext('2d'), {
+    type:'doughnut',
+    data:{ labels, datasets:[{ data:counts, backgroundColor:COLORS.slice(0,labels.length), borderWidth:2, borderColor:'#fff', hoverOffset:7 }] },
+    options: baseOpt
+  });
+  S.charts.bar = new Chart(document.getElementById('ch-bar').getContext('2d'), {
+    type:'bar',
+    data:{ labels, datasets:[{ label:'จำนวน', data:counts, backgroundColor:COLORS.slice(0,labels.length), borderRadius:6 }] },
+    options:{ ...baseOpt, plugins:{ legend:{display:false} }, scales:{ x:{ticks:{font:{family:'Sarabun',size:10}}}, y:{beginAtZero:true,ticks:{stepSize:1}} } }
+  });
+}
+
+function buildSupplyDash(ss) {
+  // Defensive: if no data, show empty
+  const types = ['สำนักงาน','งานบ้าน','คอมพิวเตอร์'];
+  const names = { สำนักงาน:'วัสดุสำนักงาน', งานบ้าน:'วัสดุงานบ้านงานครัว', คอมพิวเตอร์:'วัสดุคอมพิวเตอร์' };
+
+  document.getElementById('sup-dash-grid').innerHTML = types.map(t => {
+    const d = ss[t] || { count:0, totalQty:0, totalValue:0, items:[] };
+    const color = SUP_COLORS[t];
+    const itemRows = (d.items||[]).slice(0,5).map(it => `
+      <div class="sdc-row">
+        <div class="sr-name" title="${esc(it.name)}">${esc(it.name)}</div>
+        <div class="sr-qty">${it.qty}</div>
+        <div class="sr-val">${fmt(it.val)} ฿</div>
+      </div>`).join('');
+    const moreCount = (d.items||[]).length - 5;
+    return `
+    <div class="sup-dash-card">
+      <div class="sdc-head">
+        <div class="sdc-ico" style="background:${SUP_BG[t]};color:${color};font-size:18px">${SUP_ICO[t]}</div>
+        <div>
+          <h6>${names[t]}</h6>
+          <div style="font-size:10px;color:#8aaca5;margin-top:1px">${d.count} รายการ</div>
+        </div>
+      </div>
+      <div class="sdc-stats">
+        <div class="sdc-stat">
+          <div class="sv" style="color:${color}">${d.count}</div>
+          <div class="sl">รายการ</div>
+        </div>
+        <div class="sdc-stat">
+          <div class="sv">${fmt(d.totalQty,true)}</div>
+          <div class="sl">คงเหลือ (ชิ้น)</div>
+        </div>
+        <div class="sdc-stat">
+          <div class="sv">${fmt(d.totalValue,true)}</div>
+          <div class="sl">มูลค่า (บาท)</div>
+        </div>
+      </div>
+      <div class="sdc-items">${itemRows || '<div style="padding:14px;text-align:center;font-size:12px;color:#8aaca5">ยังไม่มีรายการ</div>'}</div>
+      ${moreCount > 0 ? `<div class="sdc-more" onclick="goPage('supplies',null);switchSupTabByType('${t}')">+ อีก ${moreCount} รายการ →</div>` : ''}
+    </div>`;
+  }).join('');
+
+  // Supply value bar chart
+  if (S.charts.supVal) S.charts.supVal.destroy();
+  if (S.charts.supPie) S.charts.supPie.destroy();
+
+  const supLabels = types.map(t => names[t]);
+  const supVals   = types.map(t => (ss[t]||{}).totalValue||0);
+  const supCounts = types.map(t => (ss[t]||{}).count||0);
+  const supColors = types.map(t => SUP_COLORS[t]);
+
+  const baseOpt2 = { responsive:true, maintainAspectRatio:true,
+    plugins:{ legend:{ position:'bottom', labels:{ font:{family:'Sarabun',size:11}, boxWidth:12, padding:9 } } } };
+
+  S.charts.supVal = new Chart(document.getElementById('ch-sup-val').getContext('2d'), {
+    type:'bar',
+    data:{ labels:supLabels, datasets:[{ label:'มูลค่าคงเหลือ (บาท)', data:supVals,
+      backgroundColor:supColors.map(c=>c+'cc'), borderColor:supColors, borderWidth:2, borderRadius:8 }] },
+    options:{ ...baseOpt2, plugins:{ legend:{display:false} },
+      scales:{ x:{ticks:{font:{family:'Sarabun',size:11}}},
+        y:{ beginAtZero:true, ticks:{ font:{family:'Sarabun',size:10}, callback: v => fmt(v,true)+' ฿' } } } }
+  });
+  S.charts.supPie = new Chart(document.getElementById('ch-sup-pie').getContext('2d'), {
+    type:'doughnut',
+    data:{ labels:supLabels, datasets:[{ data:supCounts,
+      backgroundColor:supColors, borderWidth:2, borderColor:'#fff', hoverOffset:8 }] },
+    options: baseOpt2
+  });
+}
+
+// helper: switch supply tab and navigate
+function switchSupTabByType(type) {
+  setTimeout(() => {
+    const tab = document.querySelector(`#sup-tabs .tab[data-stype="${type}"]`);
+    if (tab) { document.querySelectorAll('#sup-tabs .tab').forEach(t=>t.classList.remove('active')); tab.classList.add('active'); loadSup(type); }
+  }, 100);
+}
+
+function buildDashMt(data) {
+  const tbody = document.getElementById('dash-mt');
+  if (!data || !data.length) { tbody.innerHTML = '<tr><td colspan="5"><div class="empty" style="padding:16px"><i class="bi bi-tools"></i><p>ยังไม่มีประวัติ</p></div></td></tr>'; return; }
+  tbody.innerHTML = data.map(r => `<tr>
+    <td><code style="font-size:11px;background:#f0f7f5;padding:1px 6px;border-radius:4px">${esc(r['รหัสครุภัณฑ์'])||'-'}</code></td>
+    <td>${esc(r['ชื่อรายการ'])||'-'}</td>
+    <td style="font-size:12px">${r['วันที่แจ้งซ่อม']||'-'}</td>
+    <td style="font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r['อาการชำรุด/ปัญหา'])||'-'}</td>
+    <td>${bsMt(r['สถานะการซ่อม'])}</td>
+  </tr>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// EQUIPMENT
+// ═══════════════════════════════════════════════════
+async function loadEq() {
+  showLoad(true);
+  const r = await gas('getEquipment');
+  showLoad(false);
+  if (!r.success) { errAlert(r.error||'โหลดครุภัณฑ์ไม่สำเร็จ'); return; }
+  S.eqAll = r.data || [];
+  renderEq(S.eqAll);
+  buildEqDL();
+  document.getElementById('eq-badge').textContent = S.eqAll.length;
+}
+function renderEq(data) {
+  document.getElementById('eq-cnt').textContent = `แสดง ${data.length} รายการ`;
+  const tbody = document.getElementById('eq-body');
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="10"><div class="empty"><i class="bi bi-archive"></i><p>ไม่พบรายการครุภัณฑ์</p></div></td></tr>'; return; }
+  tbody.innerHTML = data.map((r,i) => `<tr>
+    <td style="color:#8aaca5;font-size:11px">${i+1}</td>
+    <td><code style="font-size:11px;background:#f0f7f5;padding:1px 6px;border-radius:4px">${esc(r['รหัสครุภัณฑ์'])||'-'}</code></td>
+    <td style="max-width:200px"><span style="font-weight:500">${esc(r['ชื่อรายการ/รายละเอียด'])||'-'}</span></td>
+    <td><span class="bt">${esc(r['ประเภทครุภัณฑ์'])||'-'}</span></td>
+    <td style="text-align:center">${r['จำนวนหน่วย']||1} <small style="color:#8aaca5">${esc(r['หน่วยนับ'])||''}</small></td>
+    <td style="font-size:12px;white-space:nowrap">${r['วันที่ได้มา']||'-'}</td>
+    <td style="text-align:right;font-weight:600">${fmt(r['มูลค่าการได้มา'])}</td>
+    <td>${bsEq(r['สถานะพัสดุ'])}</td>
+    <td style="font-size:12px;color:#6b8c85">${esc(r['สถานที่ตั้ง'])||'-'}</td>
+    <td style="white-space:nowrap">
+      <button class="bic bic-e" onclick="openEquipForm(${r._row})" title="แก้ไข"><i class="bi bi-pencil"></i></button>
+      <button class="bic bic-d" onclick="delEq(${r._row})" title="ลบ"><i class="bi bi-trash"></i></button>
+    </td>
+  </tr>`).join('');
+}
+function filterEq() {
+  const q = (document.getElementById('eq-q').value||'').toLowerCase();
+  const ft = document.getElementById('eq-ftype').value;
+  const fs = document.getElementById('eq-fst').value;
+  renderEq(S.eqAll.filter(r => {
+    const name = (r['ชื่อรายการ/รายละเอียด']||'').toLowerCase();
+    const code = (r['รหัสครุภัณฑ์']||'').toLowerCase();
+    const loc  = (r['สถานที่ตั้ง']||'').toLowerCase();
+    return (!q || name.includes(q) || code.includes(q) || loc.includes(q))
+        && (!ft || r['ประเภทครุภัณฑ์'] === ft)
+        && (!fs || r['สถานะพัสดุ'] === fs);
+  }));
+}
+function openEquipForm(rowNum) {
+  const m = new bootstrap.Modal(document.getElementById('eqModal'));
+  document.getElementById('ef-row').value = rowNum || '';
+  if (rowNum) {
+    const r = S.eqAll.find(e => e._row === rowNum); if (!r) return;
+    document.getElementById('eq-mtitle').textContent = 'แก้ไขครุภัณฑ์';
+    document.getElementById('ef-code').value   = r['รหัสครุภัณฑ์']||'';
+    document.getElementById('ef-gf').value     = r['รหัสสินทรัพย์GF']||'';
+    document.getElementById('ef-name').value   = r['ชื่อรายการ/รายละเอียด']||'';
+    document.getElementById('ef-type').value   = r['ประเภทครุภัณฑ์']||'ครุภัณฑ์การแพทย์';
+    document.getElementById('ef-qty').value    = r['จำนวนหน่วย']||1;
+    document.getElementById('ef-unit').value   = r['หน่วยนับ']||'';
+    document.getElementById('ef-date').value   = r['วันที่ได้มา']||'';
+    document.getElementById('ef-val').value    = r['มูลค่าการได้มา']||0;
+    document.getElementById('ef-status').value = r['สถานะพัสดุ']||'ใช้งานปกติ';
+    document.getElementById('ef-found').value  = r['ตรวจพบ/ไม่พบ']||'ตรวจพบ';
+    document.getElementById('ef-loc').value    = r['สถานที่ตั้ง']||'';
+    document.getElementById('ef-note').value   = r['หมายเหตุ']||'';
+  } else {
+    document.getElementById('eq-mtitle').textContent = 'เพิ่มครุภัณฑ์';
+    ['ef-code','ef-gf','ef-name','ef-unit','ef-date','ef-loc','ef-note'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('ef-qty').value = 1;
+    document.getElementById('ef-val').value = 0;
+    document.getElementById('ef-status').selectedIndex = 0;
+    document.getElementById('ef-found').selectedIndex = 0;
+    document.getElementById('ef-type').selectedIndex = 0;
+  }
+  m.show();
+}
+async function saveEquip() {
+  const code = document.getElementById('ef-code').value.trim();
+  const name = document.getElementById('ef-name').value.trim();
+  if (!code || !name) { Swal.fire({icon:'warning',title:'กรุณากรอกข้อมูล',text:'ต้องใส่รหัสครุภัณฑ์และชื่อรายการ',confirmButtonColor:'var(--primary)'}); return; }
+  const data = { รหัสครุภัณฑ์:code, รหัสสินทรัพย์GF:document.getElementById('ef-gf').value.trim(),
+    ชื่อรายการ:name, ประเภทครุภัณฑ์:document.getElementById('ef-type').value,
+    จำนวนหน่วย:document.getElementById('ef-qty').value, หน่วยนับ:document.getElementById('ef-unit').value.trim(),
+    วันที่ได้มา:document.getElementById('ef-date').value, มูลค่าการได้มา:document.getElementById('ef-val').value,
+    สถานะพัสดุ:document.getElementById('ef-status').value, ตรวจพบ:document.getElementById('ef-found').value,
+    หมายเหตุ:document.getElementById('ef-note').value.trim(), สถานที่ตั้ง:document.getElementById('ef-loc').value.trim() };
+  const rowNum = document.getElementById('ef-row').value;
+  bootstrap.Modal.getInstance(document.getElementById('eqModal')).hide();
+  showLoad(true);
+  const r = rowNum ? await gas('updateEquipment', rowNum, data) : await gas('addEquipment', data);
+  showLoad(false);
+  if (!r.success) { errAlert(r.error||'บันทึกไม่สำเร็จ'); return; }
+  toast('success', rowNum ? 'แก้ไขสำเร็จ' : 'เพิ่มครุภัณฑ์สำเร็จ');
+  loadEq();
+}
+async function delEq(rowNum) {
+  confirm2('ยืนยันการลบ', 'ต้องการลบรายการนี้?', async () => {
+    showLoad(true);
+    const r = await gas('deleteEquipment', rowNum);
+    showLoad(false);
+    if (!r.success) { errAlert(r.error||'ลบไม่สำเร็จ'); return; }
+    toast('success', 'ลบสำเร็จ');
+    loadEq();
+  });
+}
+function buildEqDL() {
+  document.getElementById('eq-dl').innerHTML = S.eqAll.map(r =>
+    `<option value="${esc(r['รหัสครุภัณฑ์']||'')}">${esc(r['ชื่อรายการ/รายละเอียด']||'')}</option>`
+  ).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// MAINTENANCE
+// ═══════════════════════════════════════════════════
+async function loadMt() {
+  showLoad(true);
+  const r = await gas('getMaintenance');
+  showLoad(false);
+  if (!r.success) { errAlert(r.error||'โหลดประวัติซ่อมไม่สำเร็จ'); return; }
+  S.mtAll = r.data || [];
+  renderMt(S.mtAll);
+}
+function renderMt(data) {
+  document.getElementById('mt-cnt').textContent = `แสดง ${data.length} รายการ`;
+  const tbody = document.getElementById('mt-body');
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="10"><div class="empty"><i class="bi bi-tools"></i><p>ยังไม่มีประวัติการซ่อมบำรุง</p></div></td></tr>'; return; }
+  tbody.innerHTML = data.map((r,i) => `<tr>
+    <td style="color:#8aaca5;font-size:11px">${i+1}</td>
+    <td><code style="font-size:11px;background:#f0f7f5;padding:1px 6px;border-radius:4px">${esc(r['รหัสครุภัณฑ์'])||'-'}</code></td>
+    <td style="max-width:160px;font-size:13px">${esc(r['ชื่อรายการ'])||'-'}</td>
+    <td style="font-size:12px;white-space:nowrap">${r['วันที่แจ้งซ่อม']||'-'}</td>
+    <td style="font-size:12px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r['อาการชำรุด/ปัญหา'])||'-'}</td>
+    <td style="text-align:right;font-weight:600;color:var(--danger)">${fmt(r['ค่าใช้จ่าย (บาท)'])}</td>
+    <td style="font-size:12px">${esc(r['ผู้รับผิดชอบ'])||'-'}</td>
+    <td style="font-size:12px;white-space:nowrap">${r['วันที่เสร็จสิ้น']||'-'}</td>
+    <td>${bsMt(r['สถานะการซ่อม'])}</td>
+    <td style="white-space:nowrap">
+      <button class="bic bic-e" onclick="openMaintForm(${r._row})" title="แก้ไข"><i class="bi bi-pencil"></i></button>
+      <button class="bic bic-d" onclick="delMt(${r._row})" title="ลบ"><i class="bi bi-trash"></i></button>
+    </td>
+  </tr>`).join('');
+}
+function filterMt() {
+  const q = (document.getElementById('mt-q').value||'').toLowerCase();
+  const fs = document.getElementById('mt-fst').value;
+  renderMt(S.mtAll.filter(r => {
+    const code = (r['รหัสครุภัณฑ์']||'').toLowerCase();
+    const name = (r['ชื่อรายการ']||'').toLowerCase();
+    const prob = (r['อาการชำรุด/ปัญหา']||'').toLowerCase();
+    return (!q || code.includes(q) || name.includes(q) || prob.includes(q))
+        && (!fs || r['สถานะการซ่อม'] === fs);
+  }));
+}
+function openMaintForm(rowNum) {
+  const m = new bootstrap.Modal(document.getElementById('mtModal'));
+  document.getElementById('mf-row').value = rowNum || '';
+  if (rowNum) {
+    const r = S.mtAll.find(e => e._row === rowNum); if (!r) return;
+    document.getElementById('mt-mtitle').textContent = 'แก้ไขประวัติซ่อมบำรุง';
+    document.getElementById('mf-code').value   = r['รหัสครุภัณฑ์']||'';
+    document.getElementById('mf-name').value   = r['ชื่อรายการ']||'';
+    document.getElementById('mf-date').value   = r['วันที่แจ้งซ่อม']||'';
+    document.getElementById('mf-done').value   = r['วันที่เสร็จสิ้น']||'';
+    document.getElementById('mf-prob').value   = r['อาการชำรุด/ปัญหา']||'';
+    document.getElementById('mf-sol').value    = r['วิธีการซ่อม/แก้ไข']||'';
+    document.getElementById('mf-cost').value   = r['ค่าใช้จ่าย (บาท)']||0;
+    document.getElementById('mf-who').value    = r['ผู้รับผิดชอบ']||'';
+    document.getElementById('mf-status').value = r['สถานะการซ่อม']||'รอดำเนินการ';
+    document.getElementById('mf-note').value   = r['หมายเหตุ']||'';
+  } else {
+    document.getElementById('mt-mtitle').textContent = 'บันทึกการซ่อมบำรุง';
+    ['mf-code','mf-name','mf-done','mf-prob','mf-sol','mf-who','mf-note'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('mf-cost').value = 0;
+    document.getElementById('mf-status').selectedIndex = 0;
+    document.getElementById('mf-date').value = new Date().toISOString().split('T')[0];
+  }
+  m.show();
+}
+async function saveMaint() {
+  const code = document.getElementById('mf-code').value.trim();
+  const prob = document.getElementById('mf-prob').value.trim();
+  if (!code || !prob) { Swal.fire({icon:'warning',title:'กรุณากรอกข้อมูล',text:'ต้องใส่รหัสครุภัณฑ์และอาการชำรุด',confirmButtonColor:'var(--primary)'}); return; }
+  const data = { รหัสครุภัณฑ์:code, ชื่อรายการ:document.getElementById('mf-name').value.trim(),
+    วันที่แจ้งซ่อม:document.getElementById('mf-date').value, วันที่เสร็จสิ้น:document.getElementById('mf-done').value,
+    อาการชำรุด:prob, วิธีการซ่อม:document.getElementById('mf-sol').value.trim(),
+    ค่าใช้จ่าย:document.getElementById('mf-cost').value, ผู้รับผิดชอบ:document.getElementById('mf-who').value.trim(),
+    สถานะการซ่อม:document.getElementById('mf-status').value, หมายเหตุ:document.getElementById('mf-note').value.trim() };
+  const rowNum = document.getElementById('mf-row').value;
+  bootstrap.Modal.getInstance(document.getElementById('mtModal')).hide();
+  showLoad(true);
+  const r = rowNum ? await gas('updateMaintenance', rowNum, data) : await gas('addMaintenance', data);
+  showLoad(false);
+  if (!r.success) { errAlert(r.error||'บันทึกไม่สำเร็จ'); return; }
+  toast('success', rowNum ? 'แก้ไขสำเร็จ' : 'บันทึกการซ่อมสำเร็จ');
+  loadMt();
+}
+async function delMt(rowNum) {
+  confirm2('ยืนยันการลบ', 'ต้องการลบประวัติซ่อมนี้?', async () => {
+    showLoad(true);
+    const r = await gas('deleteMaintenance', rowNum);
+    showLoad(false);
+    if (!r.success) { errAlert(r.error||'ลบไม่สำเร็จ'); return; }
+    toast('success', 'ลบสำเร็จ');
+    loadMt();
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// SUPPLIES
+// ═══════════════════════════════════════════════════
+async function loadSup(type) {
+  S.supTab = type || S.supTab;
+  showLoad(true);
+  const r = await gas('getSupplies', S.supTab);
+  showLoad(false);
+  if (!r.success) { errAlert(r.error||'โหลดวัสดุไม่สำเร็จ'); return; }
+  S.supAll = r.data || [];
+  renderSup(S.supAll);
+}
+function renderSup(data) {
+  const tbody = document.getElementById('sup-body');
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="10"><div class="empty"><i class="bi bi-box-seam"></i><p>ไม่พบรายการวัสดุ</p></div></td></tr>';
+    document.getElementById('sup-footer').innerHTML = ''; return; }
+  tbody.innerHTML = data.map((r,i) => `<tr>
+    <td style="color:#8aaca5;font-size:11px">${i+1}</td>
+    <td style="font-size:12px">${esc(r['รหัสวัสดุ'])||'-'}</td>
+    <td style="font-weight:500">${esc(r['รายการวัสดุ'])||'-'}</td>
+    <td style="text-align:center">${r['จำนวนยกมา']||0}</td>
+    <td style="text-align:right">${fmt(r['ราคาต่อหน่วย'])}</td>
+    <td style="text-align:right">${fmt(r['ยอดรับ(บาท)'])}</td>
+    <td style="text-align:right;color:var(--danger)">${fmt(r['ยอดจ่าย(บาท)'])}</td>
+    <td style="text-align:center;font-weight:700;color:var(--primary)">${r['จำนวนคงเหลือ']||0}</td>
+    <td style="text-align:right;font-weight:600">${fmt(r['ยอดคงเหลือ(บาท)'])}</td>
+    <td><button class="bic bic-d" onclick="delSup(${r._row})" title="ลบ"><i class="bi bi-trash"></i></button></td>
+  </tr>`).join('');
+  const tv = data.reduce((s,r)=>s+(Number(r['ยอดคงเหลือ(บาท)'])||0),0);
+  document.getElementById('sup-footer').innerHTML = `<span>รวม <strong>${data.length}</strong> รายการ</span><span>มูลค่าคงเหลือ: <strong>${fmt(tv)} บาท</strong></span>`;
+}
+function switchSupTab(type, el) {
+  document.querySelectorAll('#sup-tabs .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  loadSup(type);
+}
+function openSupplyForm() {
+  document.getElementById('sf-type').value = S.supTab;
+  ['sf-code','sf-name','sf-note'].forEach(id => document.getElementById(id).value = '');
+  ['sf-bal','sf-in','sf-out','sf-price'].forEach(id => document.getElementById(id).value = 0);
+  new bootstrap.Modal(document.getElementById('supModal')).show();
+}
+async function saveSupply() {
+  const name = document.getElementById('sf-name').value.trim();
+  if (!name) { Swal.fire({icon:'warning',title:'กรุณากรอกชื่อรายการวัสดุ',confirmButtonColor:'var(--primary)'}); return; }
+  const type = document.getElementById('sf-type').value;
+  const data = { รหัสวัสดุ:document.getElementById('sf-code').value.trim(), รายการวัสดุ:name,
+    จำนวนยกมา:document.getElementById('sf-bal').value, ราคาต่อหน่วย:document.getElementById('sf-price').value,
+    จำนวนรับ:document.getElementById('sf-in').value, จำนวนจ่าย:document.getElementById('sf-out').value,
+    หมายเหตุ:document.getElementById('sf-note').value.trim() };
+  bootstrap.Modal.getInstance(document.getElementById('supModal')).hide();
+  showLoad(true);
+  const r = await gas('addSupply', type, data);
+  showLoad(false);
+  if (!r.success) { errAlert(r.error||'บันทึกไม่สำเร็จ'); return; }
+  toast('success', 'เพิ่มรายการวัสดุสำเร็จ');
+  loadSup(type);
+}
+async function delSup(rowNum) {
+  confirm2('ยืนยันการลบ', 'ต้องการลบรายการวัสดุนี้?', async () => {
+    showLoad(true);
+    const r = await gas('deleteSupply', S.supTab, rowNum);
+    showLoad(false);
+    if (!r.success) { errAlert(r.error||'ลบไม่สำเร็จ'); return; }
+    toast('success', 'ลบสำเร็จ');
+    loadSup();
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// ASSET VALUE BY CATEGORY
+// ═══════════════════════════════════════════════════
+const THAI_MONTHS = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
+  'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
+function formatThaiDate(iso) {
+  if (!iso) return '';
+  try {
+    const d = new Date(iso);
+    if (isNaN(d)) return iso;
+    const day = d.getDate();
+    const month = THAI_MONTHS[d.getMonth()];
+    const year = d.getFullYear() + 543;
+    return day + ' ' + month + ' ' + year;
+  } catch(e) { return iso; }
+}
+
+let AV_DATA = null;
+
+async function loadAssetValue() {
+  const el = document.getElementById('av-asof');
+  if (!el.value) {
+    const t = new Date();
+    el.value = t.toISOString().split('T')[0];
+  }
+  const asOf = el.value;
+  showLoad(true);
+  const r = await gas('getAssetValueByCategory', asOf);
+  showLoad(false);
+  if (!r.success) { errAlert(r.error||'โหลดข้อมูลไม่สำเร็จ'); return; }
+  AV_DATA = r;
+  renderAssetValue(r);
+}
+
+function renderAssetValue(r) {
+  const asOfText = formatThaiDate(r.asOfDate);
+  document.getElementById('av-asof-text').textContent = asOfText ? ('ข้อมูล ณ วันที่ ' + asOfText) : '';
+  document.getElementById('av-asof-inth').textContent = asOfText ? ('ณ วันที่ ' + asOfText) : '';
+
+  const tbody = document.getElementById('av-body');
+  tbody.innerHTML = r.rows.map(row => {
+    const hasValue = row.value > 0;
+    const valueCell = hasValue
+      ? '<td class="num">' + fmt(row.value) + '</td>'
+      : '<td class="num zero">-</td>';
+    const cntBadge = row.count > 0 ? '<span class="cnt-pill">' + row.count + ' รายการ</span>' : '';
+    const clickable = row.count > 0 ? 'clickable' : '';
+    const onclick = row.count > 0 ? ('onclick="openAvDetail(\'' + row.code + '\')"') : '';
+    return '<tr class="' + clickable + '" ' + onclick + ' title="' + (row.count>0?'คลิกเพื่อดูรายการ':'') + '">'
+      + '<td class="seq">' + row.seq + '</td>'
+      + '<td class="code">' + esc(row.code) + '</td>'
+      + '<td class="name">' + esc(row.name) + cntBadge + '</td>'
+      + valueCell
+      + '</tr>';
+  }).join('');
+  document.getElementById('av-total').textContent = fmt(r.totalValue);
+  closeAvDetail();
+}
+
+function openAvDetail(code) {
+  if (!AV_DATA) return;
+  const row = AV_DATA.rows.find(x => x.code === code);
+  if (!row || !row.items.length) return;
+  document.getElementById('av-detail-title').innerHTML =
+    '<i class="bi bi-list-ul me-2"></i>รายการใน' + esc(row.name) +
+    ' <span style="color:#6b8c85;font-weight:400;font-size:12px;margin-left:6px">(รหัส ' + esc(row.code) + ') · ' + row.count + ' รายการ · มูลค่ารวม ' + fmt(row.value) + ' บาท</span>';
+  const body = document.getElementById('av-detail-body');
+  body.innerHTML = row.items.map((it,i) =>
+    '<tr>'
+    + '<td style="color:#8aaca5;width:36px">' + (i+1) + '</td>'
+    + '<td><code style="font-size:11px;background:#f0f7f5;padding:1px 6px;border-radius:4px">' + (esc(it.code)||'-') + '</code></td>'
+    + '<td>' + (esc(it.name)||'-') + '</td>'
+    + '<td><span class="bt">' + (esc(it.type)||'-') + '</span></td>'
+    + '<td style="font-size:12px;white-space:nowrap">' + (esc(it.date)||'-') + '</td>'
+    + '<td style="text-align:right;font-weight:600">' + fmt(it.value) + '</td>'
+    + '</tr>'
+  ).join('');
+  document.getElementById('av-detail').classList.add('show');
+  document.getElementById('av-detail').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function closeAvDetail() {
+  document.getElementById('av-detail').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════════
+// REPORT
+// ═══════════════════════════════════════════════════
+let RPT_DATA = null; // cache last loaded report
+
+async function loadReport() {
+  const year = document.getElementById('rpt-year').value;
+  showLoad(true);
+  const r = await gas('getAnnualReport', year);
+  showLoad(false);
+  if (!r.success) { errAlert(r.error||'โหลดรายงานไม่สำเร็จ'); return; }
+  RPT_DATA = r;
+  // Show tabs
+  document.getElementById('rpt-tabs').style.display = 'flex';
+  // Reset to first tab
+  document.querySelectorAll('#rpt-tabs .tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('#rpt-tabs .tab[data-rtab="eq"]').classList.add('active');
+  renderRptEq(r);
+}
+
+function switchRptTab(tab, el) {
+  if (!RPT_DATA) return;
+  document.querySelectorAll('#rpt-tabs .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if      (tab === 'eq')   renderRptEq(RPT_DATA);
+  else if (tab === 'off')  renderRptSup(RPT_DATA, 'สำนักงาน', '📎 วัสดุสำนักงาน');
+  else if (tab === 'home') renderRptSup(RPT_DATA, 'งานบ้าน',  '🏠 วัสดุงานบ้านงานครัว');
+  else if (tab === 'comp') renderRptSup(RPT_DATA, 'คอมพิวเตอร์', '💻 วัสดุคอมพิวเตอร์');
+  else if (tab === 'all')  renderRptAll(RPT_DATA);
+}
+
+// ── helpers ──
+function rptHeader(year) {
+  return `
+    <div class="rpt-hdr">
+      <div class="rpt-title">สรุปรายงานผลการตรวจสอบพัสดุประจำปีงบประมาณ พ.ศ. ${year}</div>
+      <div style="font-size:13px;margin-top:5px;color:var(--primary);font-weight:600">โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านคำใหญ่</div>
+      <div style="font-size:12px;color:#555;margin-top:2px">รหัสหน่วยเบิกจ่าย 05374 &nbsp;|&nbsp; ข้อมูล ณ วันที่ 30 กันยายน ${year}</div>
+    </div>`;
+}
+function sigRow() {
+  return `<div class="sig-row">
+    ${[['นางสาวกชพรพรรณ ดวงประทุม','พยาบาลวิชาชีพ ชำนาญการ','ประธานกรรมการ'],
+       ['นางปาริชาติ เขียววารี','เจ้าพนักงานสาธารณสุข ชำนาญงาน','กรรมการ'],
+       ['นางจารวี เพ็งโสภา','พยาบาลวิชาชีพ ชำนาญการ','กรรมการ']]
+      .map(([n,pos,role])=>`<div class="sig-box">
+        <div class="sg-role">ลงชื่อ ................................ ${role}</div>
+        <div class="sg-name">${n}</div><div class="sg-pos">${pos}</div>
+      </div>`).join('')}
+  </div>`;
+}
+function rptSumBox(items) {
+  return `<div class="rpt-sum-boxes">${items.map(([l,v,c,bg])=>
+    `<div class="rsb" style="background:${bg}"><div class="rv" style="color:${c}">${v}</div><div class="rl" style="color:${c}">${l}</div></div>`
+  ).join('')}</div>`;
+}
+function secTitle(ico, bg, col, label) {
+  return `<div class="rpt-sec-title"><div class="rts-ico" style="background:${bg};color:${col}">${ico}</div><span>${label}</span></div>`;
+}
+
+// ── Section: ครุภัณฑ์ ──
+function buildEqSection(res) {
+  const { eqData: data, byType, year } = res;
+  // Support old format where data key was 'data'
+  const items = data || res.data || [];
+  const total = items.length;
+  const found = items.filter(r=>['ตรวจพบ','พบ'].includes(r['ตรวจพบ/ไม่พบ'])).length;
+  const dmg   = items.filter(r=>r['สถานะพัสดุ']==='ชำรุด').length;
+  const tval  = items.reduce((s,r)=>s+(Number(r['มูลค่าการได้มา'])||0),0);
+  const typeRows = Object.keys(byType||{}).map((t,i) => {
+    const d = byType[t];
+    return `<tr>
+      <td class="ctr">${i+1}</td><td>${esc(t)}</td>
+      <td class="ctr">${d.total}</td><td class="ctr">${d.found}</td>
+      <td class="ctr">${d.damaged}</td><td class="ctr">${d.notFound}</td>
+      <td class="ctr">${d.total-d.damaged}</td>
+    </tr>`;
+  }).join('');
+  const detRows = items.map((r,i) => `<tr>
+    <td class="ctr">${i+1}</td>
+    <td style="font-size:10.5px">${esc(r['รหัสครุภัณฑ์'])||'-'}</td>
+    <td>${esc(r['ชื่อรายการ/รายละเอียด'])||'-'}</td>
+    <td class="ctr" style="font-size:11px">${esc(r['ประเภทครุภัณฑ์'])||'-'}</td>
+    <td class="ctr">${r['จำนวนหน่วย']||1} ${esc(r['หน่วยนับ'])||''}</td>
+    <td class="num">${fmt(r['มูลค่าการได้มา'])}</td>
+    <td class="ctr" style="${r['สถานะพัสดุ']==='ชำรุด'?'color:#b93a0a;font-weight:600':''}">${esc(r['สถานะพัสดุ'])||'-'}</td>
+    <td class="ctr">${esc(r['ตรวจพบ/ไม่พบ'])||'-'}</td>
+    <td style="font-size:11px">${esc(r['หมายเหตุ'])||''}</td>
+  </tr>`).join('');
+  return `
+    ${secTitle('📦','rgba(15,107,88,.1)','var(--primary)','บัญชีครุภัณฑ์ — สรุปผลการตรวจสอบ')}
+    ${rptSumBox([
+      ['รายการทั้งหมด',total,'#0a6b4a','#e0f5ef'],
+      ['ตรวจพบ',found,'#856404','#fff3cd'],
+      ['ชำรุด',dmg,'#b93a0a','#fde8e0'],
+      ['ไม่พบ',total-found,'#7c3aed','#ede9fe'],
+      ['มูลค่ารวม (บาท)',fmt(tval),'#1a47a0','#e8f0fe'],
+    ])}
+    <p style="font-size:12px;color:#555;margin-bottom:8px"><strong>ตารางที่ 1</strong> สรุปครุภัณฑ์แยกตามประเภท</p>
+    <table class="sup-rpt-tbl"><thead><tr>
+      <th style="width:36px">ที่</th><th class="left">ประเภทครุภัณฑ์</th>
+      <th>จำนวน<br/>ทั้งหมด</th><th>ตรวจพบ</th><th>ชำรุด</th><th>ไม่พบ</th><th>ปกติ</th>
+    </tr></thead>
+    <tbody>${typeRows}
+      <tr class="sum-row"><td colspan="2" class="ctr">รวมทั้งสิ้น</td>
+        <td class="ctr">${total}</td><td class="ctr">${found}</td>
+        <td class="ctr">${dmg}</td><td class="ctr">${total-found}</td>
+        <td class="ctr">${total-dmg}</td>
+      </tr>
+    </tbody></table>
+    <p style="font-size:12px;color:#555;margin:16px 0 8px"><strong>ตารางที่ 2</strong> รายละเอียดครุภัณฑ์ทั้งหมด</p>
+    <table class="sup-rpt-tbl"><thead><tr>
+      <th style="width:32px">ที่</th><th>รหัสครุภัณฑ์</th><th class="left">ชื่อรายการ/รายละเอียด</th>
+      <th>ประเภท</th><th>จำนวน</th><th>มูลค่า (บาท)</th><th>สถานะ</th><th>ตรวจพบ</th><th class="left">หมายเหตุ</th>
+    </tr></thead>
+    <tbody>${detRows}</tbody>
+    <tfoot><tr class="sum-row">
+      <td colspan="5" class="ctr">รวม</td>
+      <td class="num">${fmt(tval)}</td>
+      <td class="ctr">${total-dmg} ปกติ / ${dmg} ชำรุด</td>
+      <td class="ctr">${found} พบ</td><td></td>
+    </tr></tfoot>
+    </table>`;
+}
+
+// ── Section: วัสดุแต่ละประเภท ──
+function buildSupSection(supArr, typeLabel, ico, color, bg, tblNo) {
+  const items = supArr || [];
+  const totItems = items.length;
+  const totBal  = items.reduce((s,r)=>s+(Number(r['จำนวนยกมา'])||0),0);
+  const totIn   = items.reduce((s,r)=>s+(Number(r['จำนวนรับ'])||0),0);
+  const totOut  = items.reduce((s,r)=>s+(Number(r['จำนวนจ่าย'])||0),0);
+  const totRem  = items.reduce((s,r)=>s+(Number(r['จำนวนคงเหลือ'])||0),0);
+  const totValIn  = items.reduce((s,r)=>s+(Number(r['ยอดรับ(บาท)'])||0),0);
+  const totValOut = items.reduce((s,r)=>s+(Number(r['ยอดจ่าย(บาท)'])||0),0);
+  const totValRem = items.reduce((s,r)=>s+(Number(r['ยอดคงเหลือ(บาท)'])||0),0);
+
+  const rows = items.map((r,i) => `<tr>
+    <td class="ctr">${i+1}</td>
+    <td style="font-size:11px">${esc(r['รหัสวัสดุ'])||'-'}</td>
+    <td>${esc(r['รายการวัสดุ'])||'-'}</td>
+    <td class="ctr">${Number(r['จำนวนยกมา'])||0}</td>
+    <td class="num">${fmt(r['ราคาต่อหน่วย'])}</td>
+    <td class="num">${fmt(r['ยอดยกมา(บาท)']||((Number(r['จำนวนยกมา'])||0)*(Number(r['ราคาต่อหน่วย'])||0)))}</td>
+    <td class="ctr">${Number(r['จำนวนรับ'])||0}</td>
+    <td class="num">${fmt(r['ยอดรับ(บาท)'])}</td>
+    <td class="ctr">${Number(r['จำนวนจ่าย'])||0}</td>
+    <td class="num">${fmt(r['ยอดจ่าย(บาท)'])}</td>
+    <td class="ctr" style="font-weight:700;color:var(--primary)">${Number(r['จำนวนคงเหลือ'])||0}</td>
+    <td class="num" style="font-weight:700">${fmt(r['ยอดคงเหลือ(บาท)'])}</td>
+    <td style="font-size:11px">${esc(r['หมายเหตุ'])||''}</td>
+  </tr>`).join('');
+
+  return `
+    ${secTitle(ico, bg, color, `รายงานบัญชีวัสดุประจำปี — ${typeLabel}`)}
+    ${rptSumBox([
+      ['รายการทั้งหมด', totItems, color, bg],
+      ['จำนวนรับรวม', totIn, '#1a47a0','#e8f0fe'],
+      ['จำนวนจ่ายรวม', totOut, '#b93a0a','#fde8e0'],
+      ['คงเหลือรวม (ชิ้น)', totRem, '#065f46','#d1fae5'],
+      ['มูลค่าคงเหลือ (บาท)', fmt(totValRem), '#4c1d95','#ede9fe'],
+    ])}
+    <p style="font-size:12px;color:#555;margin-bottom:8px"><strong>ตารางที่ ${tblNo}</strong> รายงานบัญชีวัสดุคงคลัง ประเภท${typeLabel}</p>
+    <div style="overflow-x:auto">
+    <table class="sup-rpt-tbl"><thead>
+      <tr>
+        <th rowspan="2" style="width:32px">ที่</th>
+        <th rowspan="2">รหัสวัสดุ</th>
+        <th rowspan="2" class="left" style="min-width:160px">รายการวัสดุ</th>
+        <th colspan="3" style="background:#0a5f49">ยอดยกมา</th>
+        <th colspan="2" style="background:#1a4a7a">รับ</th>
+        <th colspan="2" style="background:#7a3010">จ่าย</th>
+        <th colspan="2" style="background:#065f46">ยอดคงเหลือ</th>
+        <th rowspan="2" class="left">หมายเหตุ</th>
+      </tr>
+      <tr>
+        <th style="background:#0a5f49">จำนวน</th><th style="background:#0a5f49">ราคา/หน่วย</th><th style="background:#0a5f49">รวม (บาท)</th>
+        <th style="background:#1a4a7a">จำนวน</th><th style="background:#1a4a7a">รวม (บาท)</th>
+        <th style="background:#7a3010">จำนวน</th><th style="background:#7a3010">รวม (บาท)</th>
+        <th style="background:#065f46">จำนวน</th><th style="background:#065f46">รวม (บาท)</th>
+      </tr>
+    </thead>
+    <tbody>${rows || '<tr><td colspan="13" style="text-align:center;color:#8aaca5;padding:16px">ไม่มีรายการ</td></tr>'}</tbody>
+    <tfoot><tr class="sum-row">
+      <td colspan="3" class="ctr">รวมทั้งสิ้น</td>
+      <td class="ctr">${totBal}</td><td></td><td class="num">${fmt(items.reduce((s,r)=>s+(Number(r['ยอดยกมา(บาท)'])||(Number(r['จำนวนยกมา'])||0)*(Number(r['ราคาต่อหน่วย'])||0)),0))}</td>
+      <td class="ctr">${totIn}</td><td class="num">${fmt(totValIn)}</td>
+      <td class="ctr">${totOut}</td><td class="num">${fmt(totValOut)}</td>
+      <td class="ctr">${totRem}</td><td class="num">${fmt(totValRem)}</td>
+      <td></td>
+    </tr></tfoot>
+    </table></div>
+    <div style="margin-top:12px;font-size:11.5px;color:#555;display:flex;gap:24px;flex-wrap:wrap">
+      <span>ถูกต้องครบถ้วน ${items.length} รายการ</span>
+      <span>เสื่อมสภาพ 0 รายการ</span>
+      <span>สูญหาย 0 รายการ</span>
+    </div>`;
+}
+
+// ── Render functions per tab ──
+function renderRptEq(res) {
+  const year = res.year||'2568';
+  document.getElementById('rpt-content').innerHTML =
+    rptHeader(year) + buildEqSection(res) + sigRow();
+}
+
+function renderRptSup(res, type, label) {
+  const year = res.year||'2568';
+  const supData = res.supData || {};
+  const iconMap = { สำนักงาน:'📎', งานบ้าน:'🏠', คอมพิวเตอร์:'💻' };
+  const colorMap = { สำนักงาน:'#b45309', งานบ้าน:'#065f46', คอมพิวเตอร์:'#1d4ed8' };
+  const bgMap = { สำนักงาน:'rgba(245,158,11,.1)', งานบ้าน:'rgba(34,197,94,.1)', คอมพิวเตอร์:'rgba(59,130,246,.1)' };
+  document.getElementById('rpt-content').innerHTML =
+    rptHeader(year) + buildSupSection(supData[type]||[], label, iconMap[type], colorMap[type], bgMap[type], 3) + sigRow();
+}
+
+function renderRptAll(res) {
+  const year = res.year||'2568';
+  const supData = res.supData || {};
+  document.getElementById('rpt-content').innerHTML =
+    rptHeader(year) +
+    buildEqSection(res) +
+    '<div class="page-break"></div>' +
+    buildSupSection(supData['สำนักงาน']||[], 'วัสดุสำนักงาน', '📎','#b45309','rgba(245,158,11,.1)',3) +
+    '<div class="page-break"></div>' +
+    buildSupSection(supData['งานบ้าน']||[], 'วัสดุงานบ้านงานครัว', '🏠','#065f46','rgba(34,197,94,.1)',4) +
+    '<div class="page-break"></div>' +
+    buildSupSection(supData['คอมพิวเตอร์']||[], 'วัสดุคอมพิวเตอร์', '💻','#1d4ed8','rgba(59,130,246,.1)',5) +
+    sigRow();
+}
+
+// legacy shim
+function renderReport(res) { renderRptEq(res); }
+
+
+// ═══════════════════════════════════════════════════
+// EXCEL IMPORT
+// ═══════════════════════════════════════════════════
+const EQ_FIELDS = [
+  {key:'รหัสครุภัณฑ์',   label:'รหัสครุภัณฑ์',         req:true,  a:['รหัส','code','id','รหัสครุภัณฑ์','เลขครุภัณฑ์']},
+  {key:'รหัสสินทรัพย์GF',label:'รหัสสินทรัพย์ GF',      req:false, a:['gf','รหัส gf','gfmis','รหัสสินทรัพย์']},
+  {key:'ชื่อรายการ',      label:'ชื่อรายการ/รายละเอียด', req:true,  a:['ชื่อรายการ','ชื่อ','รายการ','รายละเอียด','ชื่อครุภัณฑ์','description']},
+  {key:'ประเภทครุภัณฑ์',  label:'ประเภทครุภัณฑ์',        req:false, a:['ประเภท','type','category','ประเภทครุภัณฑ์']},
+  {key:'จำนวนหน่วย',      label:'จำนวนหน่วย',            req:false, a:['จำนวน','qty','จำนวนหน่วย']},
+  {key:'หน่วยนับ',        label:'หน่วยนับ',              req:false, a:['หน่วย','unit','หน่วยนับ']},
+  {key:'วันที่ได้มา',      label:'วันที่ได้มา',            req:false, a:['วันที่','วันที่ได้มา','date','วันซื้อ']},
+  {key:'มูลค่าการได้มา',   label:'มูลค่า (บาท)',          req:false, a:['มูลค่า','ราคา','value','price','มูลค่าการได้มา','ราคาทุน']},
+  {key:'สถานะพัสดุ',      label:'สถานะพัสดุ',            req:false, a:['สถานะ','status','สถานะพัสดุ']},
+  {key:'ตรวจพบ',         label:'ตรวจพบ/ไม่พบ',          req:false, a:['ตรวจพบ','found','ตรวจพบ/ไม่พบ']},
+  {key:'หมายเหตุ',        label:'หมายเหตุ',              req:false, a:['หมายเหตุ','remark','note']},
+  {key:'สถานที่ตั้ง',      label:'สถานที่ตั้ง',            req:false, a:['สถานที่','location','ห้อง','สถานที่ตั้ง']},
+];
+const SUP_FIELDS = [
+  {key:'รหัสวัสดุ',   label:'รหัสวัสดุ',    req:false, a:['รหัส','code','รหัสวัสดุ']},
+  {key:'รายการวัสดุ', label:'รายการวัสดุ',   req:true,  a:['รายการ','ชื่อ','วัสดุ','รายการวัสดุ','description']},
+  {key:'จำนวนยกมา',  label:'จำนวนยกมา',    req:false, a:['ยกมา','จำนวนยกมา','คงเหลือยกมา']},
+  {key:'ราคาต่อหน่วย',label:'ราคาต่อหน่วย', req:false, a:['ราคา','ราคาต่อหน่วย','price']},
+  {key:'จำนวนรับ',   label:'จำนวนรับ',     req:false, a:['รับ','จำนวนรับ','รับเข้า','in']},
+  {key:'จำนวนจ่าย',  label:'จำนวนจ่าย',    req:false, a:['จ่าย','จำนวนจ่าย','จ่ายออก','out','ใช้ไป']},
+  {key:'หมายเหตุ',   label:'หมายเหตุ',     req:false, a:['หมายเหตุ','remark','note']},
+];
+let IMP = { mode:'equipment', step:1, wb:null, sheet:null, matrix:[], headers:[], rawRows:[], mapping:{}, mapped:[] };
+
+function openImport(mode) {
+  resetImp();
+  IMP.mode = mode;
+  document.querySelector(`input[name="itype"][value="${mode}"]`).checked = true;
+  document.getElementById('itype-eq').style.borderColor  = mode==='equipment'?'var(--primary)':'#cddbd7';
+  document.getElementById('itype-sup').style.borderColor = mode==='supplies'?'var(--primary)':'#cddbd7';
+  document.getElementById('sup-itype-row').style.display = mode==='supplies'?'block':'none';
+  document.getElementById('imp-title').innerHTML = `<i class="bi bi-file-earmark-arrow-up me-2"></i>นำเข้าข้อมูล${mode==='equipment'?'ครุภัณฑ์':'วัสดุ'}จาก Excel`;
+  new bootstrap.Modal(document.getElementById('impModal')).show();
+}
+function setImpType(mode) {
+  IMP.mode = mode;
+  document.getElementById('itype-eq').style.borderColor  = mode==='equipment'?'var(--primary)':'#cddbd7';
+  document.getElementById('itype-sup').style.borderColor = mode==='supplies'?'var(--primary)':'#cddbd7';
+  document.getElementById('sup-itype-row').style.display = mode==='supplies'?'block':'none';
+}
+function resetImp() {
+  IMP = { mode:'equipment', step:1, wb:null, sheet:null, matrix:[], headers:[], rawRows:[], mapping:{}, mapped:[] };
+  setImpStep(1);
+  document.getElementById('file-inp').value = '';
+  document.getElementById('fi-bar').style.display  = 'none';
+  document.getElementById('sht-sel').style.display = 'none';
+  document.getElementById('row-cfg').style.display = 'none';
+  document.getElementById('mini-pvw').style.display = 'none';
+  document.getElementById('dz').style.display = 'block';
+  document.getElementById('imp-next').disabled = true;
+  document.getElementById('imp-next').innerHTML = 'ถัดไป <i class="bi bi-chevron-right"></i>';
+  document.getElementById('imp-back').style.display = 'none';
+  document.getElementById('imp-cancel').textContent = 'ยกเลิก';
+  document.getElementById('imp-bar').style.width = '0%';
+  document.getElementById('imp-log').innerHTML = '';
+  document.getElementById('imp-next').style.display = 'inline-flex';
+}
+function setImpStep(n) {
+  IMP.step = n;
+  [1,2,3,4].forEach(i => {
+    const dot = document.getElementById('sd'+i);
+    const line = document.getElementById('sl'+i);
+    if (i < n) { dot.className='step-dot done'; dot.innerHTML='<i class="bi bi-check-fill" style="font-size:11px"></i>'; }
+    else if (i===n) { dot.className='step-dot cur'; dot.innerHTML=i; }
+    else { dot.className='step-dot'; dot.innerHTML=i; }
+    if (line) line.className = 'step-line' + (i<n?' done':'');
+    const sp = document.getElementById('is'+i);
+    if (sp) { sp.classList.remove('show'); if(i===n) sp.classList.add('show'); }
+  });
+  document.getElementById('imp-back').style.display = (n>1&&n<4)?'inline-flex':'none';
+  const nxt = document.getElementById('imp-next');
+  if (n===3) { const vc=IMP.mapped.filter(r=>r._v).length; nxt.innerHTML=`<i class="bi bi-cloud-arrow-up"></i> นำเข้า ${vc} รายการ`; nxt.disabled=vc===0; }
+  else if (n===4) { nxt.style.display='none'; document.getElementById('imp-cancel').textContent='ปิด'; }
+  else { nxt.innerHTML='ถัดไป <i class="bi bi-chevron-right"></i>'; nxt.disabled=!IMP.wb||IMP.rawRows.length===0; }
+  if (n===2) nxt.disabled=false;
+}
+function impNext() {
+  if (IMP.step===1) { buildColMap(); setImpStep(2); }
+  else if (IMP.step===2) { buildMapped(); setImpStep(3); }
+  else if (IMP.step===3) { setImpStep(4); runImport(); }
+}
+function impBack() { setImpStep(IMP.step-1); if(IMP.step===1) document.getElementById('imp-next').disabled=!IMP.wb; }
+
+// DZ handlers
+function dzOver(e) { e.preventDefault(); document.getElementById('dz').classList.add('over'); }
+function dzLeave()  { document.getElementById('dz').classList.remove('over'); }
+function dzDrop(e)  { e.preventDefault(); document.getElementById('dz').classList.remove('over'); if(e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); }
+function fileSelected(e) { if(e.target.files[0]) processFile(e.target.files[0]); }
+function clearFile() {
+  IMP.wb=null; IMP.rawRows=[];
+  document.getElementById('fi-bar').style.display='none';
+  document.getElementById('sht-sel').style.display='none';
+  document.getElementById('row-cfg').style.display='none';
+  document.getElementById('mini-pvw').style.display='none';
+  document.getElementById('dz').style.display='block';
+  document.getElementById('file-inp').value='';
+  document.getElementById('imp-next').disabled=true;
+}
+function processFile(file) {
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (!['xlsx','xls','csv'].includes(ext)) { errAlert('รองรับเฉพาะ .xlsx, .xls, .csv'); return; }
+  if (file.size > 15*1024*1024) { errAlert('ไฟล์ใหญ่เกิน 15MB'); return; }
+  document.getElementById('dz').style.display='none';
+  document.getElementById('fi-bar').style.display='block';
+  document.getElementById('fi-name').textContent = file.name;
+  document.getElementById('fi-size').textContent = (file.size/1024).toFixed(1)+' KB';
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      IMP.wb = XLSX.read(new Uint8Array(ev.target.result), {type:'array',cellDates:true,cellText:false});
+      showSheets();
+    } catch(e) { errAlert('อ่านไฟล์ไม่สำเร็จ: '+e.message); clearFile(); }
+  };
+  reader.readAsArrayBuffer(file);
+}
+function showSheets() {
+  const names = IMP.wb.SheetNames;
+  if (names.length===1) { IMP.sheet=names[0]; parseSheet(names[0]); return; }
+  document.getElementById('sht-sel').style.display='block';
+  document.getElementById('sht-btns').innerHTML = names.map((n,i)=>
+    `<button class="sht-btn${i===0?' active':''}" onclick="selSheet('${n.replace(/'/g,"\\'")}',this)">${n}</button>`).join('');
+  IMP.sheet=names[0]; parseSheet(names[0]);
+}
+function selSheet(name,btn) {
+  document.querySelectorAll('.sht-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  IMP.sheet=name; parseSheet(name);
+}
+function parseSheet(name) {
+  const matrix = XLSX.utils.sheet_to_json(IMP.wb.Sheets[name],{header:1,raw:false,defval:''});
+  IMP.matrix = matrix;
+  // Auto-detect header row
+  let best=0, bc=0;
+  matrix.slice(0,15).forEach((row,i)=>{ const c=row.filter(x=>x!=='').length; if(c>bc){bc=c;best=i;} });
+  document.getElementById('hrow').value = best+1;
+  document.getElementById('drow').value = best+2;
+  applyParse(best, best+1);
+}
+function reParse() {
+  const h = Math.max(0, parseInt(document.getElementById('hrow').value)||1) - 1;
+  const d = Math.max(h+1, parseInt(document.getElementById('drow').value)||2) - 1;
+  applyParse(h, d);
+}
+function applyParse(hi, di) {
+  const m = IMP.matrix;
+  if (!m||!m.length) return;
+  IMP.headers = (m[hi]||[]).map(h=>String(h||'').trim());
+  IMP.rawRows = m.slice(di).filter(row=>row.some(c=>c!==''&&c!=null)).map(row=>{
+    const obj={}; IMP.headers.forEach((h,i)=>obj[h]=row[i]!==undefined?String(row[i]).trim():''); return obj;
+  });
+  document.getElementById('row-cnt').textContent = IMP.rawRows.length+' แถว';
+  document.getElementById('row-cfg').style.display='block';
+  // Mini preview
+  const fh = IMP.headers.filter(h=>h!=='');
+  const rows5 = IMP.rawRows.slice(0,5);
+  document.getElementById('mini-pvw-content').innerHTML =
+    `<table class="pvw-tbl"><thead><tr>${fh.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead>
+    <tbody>${rows5.map(r=>`<tr>${fh.map(h=>`<td>${esc(r[h]||'')}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  document.getElementById('mini-pvw').style.display='block';
+  document.getElementById('imp-next').disabled = IMP.rawRows.length===0;
+}
+function buildColMap() {
+  const fields = IMP.mode==='equipment' ? EQ_FIELDS : SUP_FIELDS;
+  const headers = IMP.headers.filter(h=>h!=='');
+  // Auto-map
+  headers.forEach((h,i)=>{
+    const low = h.toLowerCase().replace(/\s+/g,'');
+    let match='__skip__';
+    for (const f of fields) {
+      for (const a of f.a) {
+        if (low.includes(a.replace(/\s+/g,'').toLowerCase()) || a.replace(/\s+/g,'').toLowerCase().includes(low)) {
+          match=f.key; break;
+        }
+      }
+      if (match!=='__skip__') break;
+    }
+    IMP.mapping[i]=match;
+  });
+  const sample = IMP.rawRows[0]||{};
+  const skipOpt = '<option value="__skip__">— ข้าม —</option>';
+  const fldOpts = fields.map(f=>`<option value="${f.key}">${f.label}${f.req?' *':''}</option>`).join('');
+  document.getElementById('cmap-body').innerHTML = headers.map((h,i)=>{
+    const sel = IMP.mapping[i]||'__skip__';
+    const ok = sel!=='__skip__';
+    return `<tr>
+      <td style="color:#8aaca5;text-align:center">${i+1}</td>
+      <td><strong>${esc(h)}</strong></td>
+      <td style="color:#6b8c85;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(sample[h]||'')}</td>
+      <td><select class="${ok?'ok':'skip'}" id="cs${i}" onchange="updMap(${i},this.value,this)">${skipOpt}${fldOpts}</select></td>
+      <td style="text-align:center" id="cst${i}">${ok?'<span style="color:#22c55e;font-size:15px"><i class="bi bi-check-circle-fill"></i></span>':'<span style="color:#fbbf24;font-size:15px"><i class="bi bi-dash-circle"></i></span>'}</td>
+    </tr>`;
+  }).join('');
+  headers.forEach((_,i)=>{ const el=document.getElementById('cs'+i); if(el) el.value=IMP.mapping[i]||'__skip__'; });
+}
+function updMap(i,val,sel) {
+  IMP.mapping[i]=val;
+  const ok=val!=='__skip__';
+  sel.className=ok?'ok':'skip';
+  document.getElementById('cst'+i).innerHTML=ok?'<span style="color:#22c55e;font-size:15px"><i class="bi bi-check-circle-fill"></i></span>':'<span style="color:#fbbf24;font-size:15px"><i class="bi bi-dash-circle"></i></span>';
+}
+function buildMapped() {
+  const fields = IMP.mode==='equipment' ? EQ_FIELDS : SUP_FIELDS;
+  const reqKeys = fields.filter(f=>f.req).map(f=>f.key);
+  IMP.mapped = IMP.rawRows.map((row,ri)=>{
+    const out={_ri:ri,_v:true,_e:[]};
+    IMP.headers.forEach((h,ci)=>{ const k=IMP.mapping[ci]; if(k&&k!=='__skip__') out[k]=row[h]||''; });
+    reqKeys.forEach(k=>{ if(!out[k]||!String(out[k]).trim()){ out._v=false; out._e.push(k); } });
+    return out;
+  });
+  const tot=IMP.mapped.length, ok=IMP.mapped.filter(r=>r._v).length;
+  document.getElementById('rc-tot').textContent=tot;
+  document.getElementById('rc-ok').textContent=ok;
+  document.getElementById('rc-bad').textContent=tot-ok;
+  const preview = IMP.mapped.slice(0,20);
+  const fv = fields;
+  document.getElementById('conf-pvw').innerHTML = `<table class="pvw-tbl">
+    <thead><tr>${fv.map(f=>`<th>${esc(f.label)}</th>`).join('')}<th>สถานะ</th></tr></thead>
+    <tbody>${preview.map(row=>`<tr style="${row._v?'':'background:#fff5f5'}">
+      ${fv.map(f=>`<td>${esc(row[f.key]||'-')}</td>`).join('')}
+      <td>${row._v?'<span style="color:#22c55e;font-size:11px">✓ ถูกต้อง</span>':'<span style="color:#b93a0a;font-size:11px">✗ ขาด:'+row._e.join(',')+'</span>'}</td>
+    </tr>`).join('')}</tbody></table>`;
+}
+async function runImport() {
+  const valid = IMP.mapped.filter(r=>r._v);
+  if (!valid.length) return;
+  const tot=valid.length;
+  document.getElementById('imp-ico').textContent='⬆️';
+  document.getElementById('imp-prog-txt').textContent='กำลังนำเข้าข้อมูล...';
+  document.getElementById('imp-log').innerHTML=`<div class="log-info">เริ่มนำเข้า ${tot} รายการ...</div>`;
+  let ok=0, err=0;
+  for (let i=0; i<valid.length; i++) {
+    const row=valid[i];
+    try {
+      const payload = IMP.mode==='equipment' ? {
+        รหัสครุภัณฑ์:row['รหัสครุภัณฑ์']||'', รหัสสินทรัพย์GF:row['รหัสสินทรัพย์GF']||'',
+        ชื่อรายการ:row['ชื่อรายการ']||'', ประเภทครุภัณฑ์:row['ประเภทครุภัณฑ์']||'ครุภัณฑ์การแพทย์',
+        จำนวนหน่วย:row['จำนวนหน่วย']||1, หน่วยนับ:row['หน่วยนับ']||'',
+        วันที่ได้มา:row['วันที่ได้มา']||'', มูลค่าการได้มา:parseFloat(String(row['มูลค่าการได้มา']||'0').replace(/[,฿]/g,''))||0,
+        สถานะพัสดุ:row['สถานะพัสดุ']||'ใช้งานปกติ', ตรวจพบ:row['ตรวจพบ']||'ตรวจพบ',
+        หมายเหตุ:row['หมายเหตุ']||'', สถานที่ตั้ง:row['สถานที่ตั้ง']||''
+      } : {
+        รหัสวัสดุ:row['รหัสวัสดุ']||'', รายการวัสดุ:row['รายการวัสดุ']||'',
+        จำนวนยกมา:parseFloat(row['จำนวนยกมา']||'0')||0, ราคาต่อหน่วย:parseFloat(String(row['ราคาต่อหน่วย']||'0').replace(/[,฿]/g,''))||0,
+        จำนวนรับ:parseFloat(row['จำนวนรับ']||'0')||0, จำนวนจ่าย:parseFloat(row['จำนวนจ่าย']||'0')||0,
+        หมายเหตุ:row['หมายเหตุ']||''
+      };
+      const fn = IMP.mode==='equipment' ? 'addEquipment' : 'addSupply';
+      const args = IMP.mode==='equipment' ? [payload] : [document.getElementById('imp-stype').value, payload];
+      const r = await gas(fn, ...args);
+      if (!r.success) { err++; impLog('err',`✗ แถว ${row._ri+1}: ${r.error||'ไม่สำเร็จ'}`); }
+      else { ok++; impLog('ok',`✓ แถว ${row._ri+1}: ${payload['ชื่อรายการ']||payload['รายการวัสดุ']||'-'}`); }
+    } catch(e) { err++; impLog('err',`✗ แถว ${row._ri+1}: ${e.message}`); }
+    // update progress
+    const pct=Math.round((ok+err)/tot*100);
+    document.getElementById('imp-bar').style.width=pct+'%';
+    document.getElementById('imp-cnt').textContent=`${ok+err} / ${tot}`;
+    document.getElementById('imp-pct').textContent=pct+'%';
+    document.getElementById('imp-prog-sub').textContent=`สำเร็จ ${ok} | ไม่สำเร็จ ${err}`;
+    if (i%5===4) await new Promise(r=>setTimeout(r,50)); // yield every 5
+  }
+  document.getElementById('imp-ico').textContent = err===0?'✅':'⚠️';
+  document.getElementById('imp-prog-txt').textContent = err===0?'นำเข้าสำเร็จทั้งหมด!':'นำเข้าเสร็จสิ้น (บางรายการไม่สำเร็จ)';
+  impLog('info',`── สรุป: สำเร็จ ${ok} | ไม่สำเร็จ ${err} ──`);
+  if (ok>0) { IMP.mode==='equipment' ? loadEq() : loadSup(); }
+}
+function impLog(type, msg) {
+  const el=document.getElementById('imp-log');
+  el.innerHTML+=`<div class="log-${type}">${esc(msg)}</div>`;
+  el.scrollTop=el.scrollHeight;
+}
+function dlTemplate() {
+  if(typeof XLSX==='undefined'){errAlert('กำลังโหลด XLSX library...');return;}
+  const wb=XLSX.utils.book_new();
+  let hdrs, rows;
+  if (IMP.mode==='equipment') {
+    hdrs=['รหัสครุภัณฑ์','รหัสสินทรัพย์GF','ชื่อรายการ/รายละเอียด','ประเภทครุภัณฑ์','จำนวนหน่วย','หน่วยนับ','วันที่ได้มา','มูลค่าการได้มา','สถานะพัสดุ','ตรวจพบ/ไม่พบ','หมายเหตุ','สถานที่ตั้ง'];
+    rows=[['7440-010-0012/1','','เครื่องปริ้นสติกเกอร์ยา','คอมพิวเตอร์',1,'เครื่อง','2567-05-27',13000,'ใช้งานปกติ','ตรวจพบ','','ห้อง IT'],
+          ['6515-069-0008/2','','เครื่องวัดความดันโลหิต','ครุภัณฑ์การแพทย์',1,'เครื่อง','2568-09-30',64000,'ใช้งานปกติ','ตรวจพบ','','ห้องตรวจ']];
+  } else {
+    hdrs=['รหัสวัสดุ','รายการวัสดุ','จำนวนยกมา','ราคาต่อหน่วย','จำนวนรับ','จำนวนจ่าย','หมายเหตุ'];
+    rows=[['','กระดาษ A4 Double A',47,115,0,5,''],['','ผงซักฟอก 1900กรัม',12,190,0,2,'']];
+  }
+  const ws=XLSX.utils.aoa_to_sheet([hdrs,...rows]);
+  ws['!cols']=hdrs.map(()=>({wch:22}));
+  XLSX.utils.book_append_sheet(wb,ws,IMP.mode==='equipment'?'ครุภัณฑ์':'วัสดุ');
+  XLSX.writeFile(wb,`template_${IMP.mode==='equipment'?'ครุภัณฑ์':'วัสดุ'}.xlsx`);
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  loadDash();
+});
+</script>
+</body>
+</html>
